@@ -6,10 +6,7 @@ This is a starter template for building AI agents using [Mastra](https://mastra.
 
 - Node.js 18+ 
 - Any of the following package managers:
-  - pnpm (recommended)
-  - npm
-  - yarn
-  - bun
+  - pnpm
 
 > **Note:** This repository ignores lock files (package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb) to avoid conflicts between different package managers. Each developer should generate their own lock file using their preferred package manager. After that, make sure to delete it from the .gitignore.
 
@@ -23,32 +20,12 @@ echo "OPENAI_API_KEY=your-key-here" >> .env
 
 2. Install dependencies using your preferred package manager:
 ```bash
-# Using pnpm (recommended)
 pnpm install
-
-# Using npm
-npm install
-
-# Using yarn
-yarn install
-
-# Using bun
-bun install
 ```
 
 2. Start the development server:
 ```bash
-# Using pnpm
 pnpm dev
-
-# Using npm
-npm run dev
-
-# Using yarn
-yarn dev
-
-# Using bun
-bun run dev
 ```
 
 This will start both the UI and agent servers concurrently.
