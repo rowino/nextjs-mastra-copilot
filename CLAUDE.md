@@ -151,6 +151,43 @@ TypeScript types alone are insufficient - runtime validation is required because
 2. Agent can call this action from backend
 3. Handler runs in browser with access to client state
 
+## Common Patterns
+
+### Unsaved Changes Warning
+When implementing forms (profile, settings, etc.), use this pattern to warn users before navigation:
+
+```typescript
+// Example: Profile edit form with unsaved changes detection
+const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
+
+useEffect(() => {
+  const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+    if (hasUnsavedChanges) {
+      e.preventDefault()
+      e.returnValue = '' // Chrome requires returnValue to be set
+    }
+  }
+
+  window.addEventListener('beforeunload', handleBeforeUnload)
+  return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+}, [hasUnsavedChanges])
+
+// For Next.js router navigation
+useEffect(() => {
+  const handleRouteChange = () => {
+    if (hasUnsavedChanges && !confirm('You have unsaved changes. Discard changes?')) {
+      router.events.emit('routeChangeError')
+      throw 'Route change aborted'
+    }
+  }
+
+  router.events.on('routeChangeStart', handleRouteChange)
+  return () => router.events.off('routeChangeStart', handleRouteChange)
+}, [hasUnsavedChanges, router])
+```
+
+**Applies to**: Profile forms (FR-011), Settings forms (FR-018), and any user-editable content.
+
 ## Project Constitution
 
 This project follows constitutional principles defined in `.specify/memory/constitution.md`:

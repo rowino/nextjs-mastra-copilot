@@ -1,11 +1,13 @@
 <!--
 Sync Impact Report:
-Version: 1.0.0 (Initial creation)
+Version: 1.1.0
 Changes:
-- Created initial constitution for Mastra + CopilotKit starter project
-- Established 5 core principles: AI-First Development, Type-Safe Contracts, Developer Experience, Observable AI Systems, Progressive Enhancement
-- Added Development Workflow and Quality Gates sections
-- Defined governance rules and amendment procedures
+- Updated Code Organization Standards to reflect Next.js app directory structure
+- Added detailed constraints for organizing frontend code (components, hooks, contexts, utils, services, constants, assets, layouts)
+- Preserved lib/ directory for shared utilities
+
+Previous versions:
+- 1.0.0: Initial constitution creation
 
 Templates Status:
 ✅ plan-template.md - Reviewed, constitution check section aligns
@@ -82,8 +84,16 @@ src/
 │       └── index.ts
 ├── app/                  # Next.js App Router
 │   ├── api/              # API routes (CopilotKit integration)
-│   └── [pages]           # UI pages
-└── lib/                  # Shared utilities (optional)
+│   ├── components/       # Reusable UI components
+│   ├── hooks/            # Custom React hooks
+│   ├── contexts/         # React context providers
+│   ├── utils/            # Utility functions and helpers (shadcn/ui, etc.)
+│   ├── services/         # API service calls and data fetching
+│   ├── constants/        # Constant values used across the app
+│   ├── assets/           # Images, icons, and other assets
+│   ├── layouts/          # Layout components for consistent design
+│   └── [pages]           # UI pages and routes
+├── lib/                  # Utilities shared across app & mastra
 ```
 
 **Constraints**:
@@ -91,6 +101,14 @@ src/
 - Tool implementations in `src/mastra/tools/`
 - API routes only for CopilotKit runtime and external integrations
 - No business logic in API routes (delegate to tools/agents)
+- UI components in `src/app/components/` (organized by feature or ui/)
+- Custom hooks in `src/app/hooks/`
+- Context providers in `src/app/contexts/`
+- Utility functions in `src/app/utils/`
+- API client code in `src/app/services/`
+- App-wide constants in `src/app/constants/`
+- Static assets in `src/app/assets/`
+- Layout components in `src/app/layouts/`
 
 ### Testing Requirements
 - **Integration tests**: Required for all new agents and tools
@@ -150,4 +168,4 @@ src/
 ### Runtime Development Guidance
 Agent-specific instructions for active development sessions are maintained separately (e.g., `CLAUDE.md`, `.github/copilot-instructions.md`). These files reference this constitution but contain tactical, session-specific context that changes frequently.
 
-**Version**: 1.0.0 | **Ratified**: 2025-10-02 | **Last Amended**: 2025-10-02
+**Version**: 1.1.0 | **Ratified**: 2025-10-02 | **Last Amended**: 2025-10-02
