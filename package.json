@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "dev:agent": "mastra dev",
-    "dev:ui": "next dev --turbopack",
-    "dev:debug": "LOG_LEVEL=debug npm run dev",
+    "dev": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "dev:debug": "LOG_LEVEL=debug pnpm dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
   "dependencies": {
     "@ag-ui/mastra": "0.1.0",
@@ -19,11 +20,11 @@
     "@copilotkit/runtime": "1.10.5",
     "@libsql/client": "^0.15.15",
     "@mastra/client-js": "0.14.1",
+    "@mastra/cloudflare-d1": "^0.13.4",
     "@mastra/core": "0.19.1",
-    "@mastra/libsql": "0.15.0",
     "@mastra/memory": "0.15.4",
+    "@opennextjs/cloudflare": "^1.9.1",
     "@openrouter/ai-sdk-provider": "^1.2.0",
-    "libsql": "^0.5.22",
     "mastra": "0.13.4",
     "next": ">=15.5.4",
     "react": "^19.0.0",
@@ -31,6 +32,7 @@
     "zod": "^3.25.0"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20251004.0",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
@@ -40,6 +42,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.42.0"
   }
 }

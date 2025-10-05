@@ -1,0 +1,20 @@
+{
+  "main": ".open-next/worker.js",
+  "name": "mastra-copilot",
+  "preview_urls": true,
+  "compatibility_date": "2025-03-25",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "d1_databases": [
+    {
+      "binding": "D1Database",
+      "database_name": "mastra-db",
+      "database_id": "9c205dc3-f908-4a2f-b025-12d59ea40000"
+    }
+  ]
+}

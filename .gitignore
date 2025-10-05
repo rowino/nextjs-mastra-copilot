@@ -43,8 +43,14 @@ next-env.d.ts
 
 .mastra/
 
+# Cloudflare build output
+.open-next/
+.wrangler/
+
 # lock files
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
 bun.lockb
+
+settings.local.json

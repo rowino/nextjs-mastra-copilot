@@ -9,19 +9,23 @@ This is a **starter template** for building AI agents using Mastra and CopilotKi
 ## Development Commands
 
 ```bash
-# Start development (runs both Next.js and Mastra dev servers concurrently)
+# Start development (Cloudflare Workers preview with D1)
 pnpm dev
 
 # Start with debug logging enabled
 pnpm dev:debug
-# Or set LOG_LEVEL manually
-LOG_LEVEL=debug pnpm dev
 
 # Build for production
 pnpm build
 
-# Run production build
-pnpm start
+# Preview production build locally
+pnpm preview
+
+# Deploy to Cloudflare
+pnpm deploy
+
+# Generate Cloudflare types
+pnpm cf-typegen
 
 # Lint
 pnpm lint
@@ -32,11 +36,13 @@ pnpm lint
 ### Three-Layer Integration Model
 
 1. **Mastra Layer** (`src/mastra/`)
-   - **Central Instance**: `src/mastra/index.ts` - Single Mastra instance configured with agents, storage (LibSQLStore), and logger
-   - **Agents**: `src/mastra/agents/index.ts` - Agent definitions with tools, model config, instructions, and memory
+   - **Central Instance**: `src/mastra/index.ts` - Factory function creates Mastra instance with D1 storage from Cloudflare context
+   - **Agents**: `src/mastra/agents/index.ts` - Agent factory functions with tools, model config, instructions, and memory
    - **Tools**: `src/mastra/tools/index.ts` - Tool implementations using `createTool()` with Zod schemas for input/output validation
 
 2. **CopilotKit Bridge** (`src/app/api/copilotkit/route.ts`)
+   - Retrieves D1 binding via `getCloudflareContext().env.D1Database`
+   - Creates Mastra instance per-request with D1 storage
    - Connects Mastra agents to CopilotKit runtime via `MastraAgent.getLocalAgents({ mastra })`
    - All Mastra agents automatically become available to the frontend through this single endpoint
    - Uses `ExperimentalEmptyAdapter` as service adapter
@@ -50,28 +56,30 @@ pnpm lint
 
 ### Key Patterns
 
-**Agent Definition Pattern**:
+**Agent Factory Pattern**:
 ```typescript
 // Define state schema for working memory
 export const AgentState = z.object({
   // Agent's persistent state shape
 });
 
-export const myAgent = new Agent({
-  name: "Agent Name",
-  tools: { toolName },
-  model: openrouter("model-name"), // or openai("model-name")
-  instructions: "System prompt",
-  memory: new Memory({
-    storage: new LibSQLStore({ url: "file::memory:" }),
-    options: {
-      workingMemory: {
-        enabled: true,
-        schema: AgentState,
+export function getMyAgent(storage: MastraStorage) {
+  return new Agent({
+    name: "Agent Name",
+    tools: { toolName },
+    model: openrouter("model-name"), // or openai("model-name")
+    instructions: "System prompt",
+    memory: new Memory({
+      storage, // D1Store passed from request context
+      options: {
+        workingMemory: {
+          enabled: true,
+          schema: AgentState,
+        },
       },
-    },
-  }),
-});
+    }),
+  });
+}
 ```
 
 **Tool Definition Pattern**:
@@ -112,13 +120,26 @@ Required:
 Optional:
 - `LOG_LEVEL` - Controls Mastra logger verbosity (`debug`, `info`, `warn`, `error`)
 
-### Storage
+### Storage - Cloudflare D1
 
-- Default: In-memory LibSQL (`:memory:` or `file::memory:`)
-- For persistence: Change LibSQLStore URL to file path or remote database
-- Storage is configured in two places:
-  - Main Mastra instance: `src/mastra/index.ts`
-  - Per-agent memory: `src/mastra/agents/index.ts`
+This template uses **Cloudflare D1** (serverless SQL database) for persistent storage.
+
+**Setup Steps:**
+1. Create D1 database: `pnpm wrangler d1 create mastra-db`
+2. Copy database ID from output
+3. Update `wrangler.jsonc` with the database ID
+4. Generate types: `pnpm cf-typegen`
+
+**Key Files:**
+- `wrangler.jsonc` - D1 database binding configuration
+- `src/mastra/index.ts` - Factory function creates D1Store from request context
+- `src/app/api/copilotkit/route.ts` - Retrieves D1 binding via `getCloudflareContext()`
+
+**Storage Flow:**
+1. Request arrives → `getCloudflareContext().env.D1Database` retrieves binding
+2. D1 binding passed to `getMastraInstance(d1Database)`
+3. D1Store created and shared across agents
+4. All memory persisted to D1 database
 
 ## Type Safety Requirements
 
