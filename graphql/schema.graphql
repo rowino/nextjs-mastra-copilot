@@ -1,0 +1,278 @@
+"""
+Indicates that an Input Object is a OneOf Input Object (and thus requires exactly one of its fields be provided).
+"""
+directive @oneOf on INPUT_OBJECT
+
+type Activity {
+  id: ID!
+  userId: ID!
+  type: ActivityType!
+  description: String!
+  ipAddress: String
+  userAgent: String
+  createdAt: DateTimeTz!
+}
+
+enum ActivityType {
+  LOGIN
+  LOGOUT
+  PROFILE_UPDATE
+  SETTINGS_CHANGE
+  PASSWORD_CHANGE
+  ACCOUNT_DELETION
+  FAILED_LOGIN
+}
+
+type AuthPayload {
+  user: User!
+  accessToken: String!
+  refreshToken: String
+  expiresAt: DateTimeTz!
+}
+
+input ChangePasswordInput {
+  currentPassword: String!
+  password: String!
+  passwordConfirmation: String!
+}
+
+type Dashboard {
+  user: User!
+  stats: UserStats!
+  widgets: [Widget!]!
+  recentActivities: [Activity!]!
+}
+
+"""A datetime string with format `Y-m-d H:i:s`"""
+scalar DateTimeTz
+
+input DeleteAccountInput {
+  password: String!
+}
+
+"""Arbitrary data encoded as JSON"""
+scalar JSON
+
+input LoginInput {
+  email: String!
+  password: String!
+  rememberMe: Boolean
+}
+
+type Mutation {
+  login(input: LoginInput!): AuthPayload!
+  register(input: RegisterInput!): AuthPayload!
+  logout: String!
+  verifyEmail(input: VerifyEmailInput!): String!
+  resendVerification: String!
+  requestPasswordReset(input: RequestPasswordResetInput!): String!
+  resetPassword(input: ResetPasswordInput!): String!
+  changePassword(input: ChangePasswordInput!): String!
+  refreshToken(input: RefreshTokenInput!): AuthPayload!
+  deleteAccount(input: DeleteAccountInput!): String!
+
+  """Update authenticated user's profile"""
+  updateProfile(input: UpdateProfileInput!): Profile!
+
+  """Upload a new avatar for authenticated user"""
+  uploadAvatar(avatar: Upload!): Profile!
+
+  """Delete authenticated user's avatar"""
+  deleteAvatar: Profile!
+
+  """Update authenticated user's settings"""
+  updateSettings(input: UpdateSettingsInput!): Settings!
+
+  """Reset authenticated user's settings to defaults"""
+  resetSettings: Settings!
+}
+
+"""Allows ordering a list of records."""
+input OrderByClause {
+  """The column that is used for ordering."""
+  column: String!
+
+  """The direction that is used for ordering."""
+  order: SortOrder!
+}
+
+"""
+Aggregate functions when ordering by a relation without specifying a column.
+"""
+enum OrderByRelationAggregateFunction {
+  """Amount of items."""
+  COUNT
+}
+
+"""
+Aggregate functions when ordering by a relation that may specify a column.
+"""
+enum OrderByRelationWithColumnAggregateFunction {
+  """Average."""
+  AVG
+
+  """Minimum."""
+  MIN
+
+  """Maximum."""
+  MAX
+
+  """Sum."""
+  SUM
+
+  """Amount of items."""
+  COUNT
+}
+
+type PasswordPolicy {
+  minLength: Int!
+  requiresUppercase: Boolean!
+  requiresLowercase: Boolean!
+  requiresNumbers: Boolean!
+  requiresSpecialCharacters: Boolean!
+}
+
+type Profile {
+  id: ID!
+  userId: ID!
+  name: String!
+  email: String!
+  avatarUrl: String
+  bio: String
+  createdAt: DateTimeTz!
+  updatedAt: DateTimeTz!
+}
+
+type Query {
+  me: User
+  passwordPolicy: PasswordPolicy
+
+  """Get authenticated user's profile"""
+  profile: Profile!
+
+  """Get authenticated user's settings"""
+  settings: Settings!
+
+  """Get authenticated user's dashboard with widgets and activities"""
+  dashboard: Dashboard!
+
+  """Get authenticated user's dashboard statistics"""
+  dashboardStats: UserStats!
+}
+
+input RefreshTokenInput {
+  refreshToken: String!
+}
+
+input RegisterInput {
+  name: String!
+  email: String!
+  password: String!
+  passwordConfirmation: String!
+}
+
+input RequestPasswordResetInput {
+  email: String!
+}
+
+input ResetPasswordInput {
+  token: String!
+  password: String!
+  passwordConfirmation: String!
+}
+
+type Settings {
+  id: ID!
+  userId: ID!
+  theme: Theme!
+  language: String!
+  timezone: String!
+  notificationsEmail: Boolean!
+  notificationsPush: Boolean!
+  notificationsSms: Boolean!
+  createdAt: DateTimeTz!
+  updatedAt: DateTimeTz!
+}
+
+"""Directions for ordering a list of records."""
+enum SortOrder {
+  """Sort records in ascending order."""
+  ASC
+
+  """Sort records in descending order."""
+  DESC
+}
+
+enum Theme {
+  LIGHT
+  DARK
+  SYSTEM
+}
+
+"""
+Specify if you want to include or exclude trashed results from a query.
+"""
+enum Trashed {
+  """Only return trashed results."""
+  ONLY
+
+  """Return both trashed and non-trashed results."""
+  WITH
+
+  """Only return non-trashed results."""
+  WITHOUT
+}
+
+input UpdateProfileInput {
+  name: String
+  bio: String
+}
+
+input UpdateSettingsInput {
+  theme: Theme
+  language: String
+  timezone: String
+  notificationsEmail: Boolean
+  notificationsPush: Boolean
+  notificationsSms: Boolean
+}
+
+"""Can be used as an argument to upload files"""
+scalar Upload
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  emailVerifiedAt: DateTimeTz
+  createdAt: DateTimeTz!
+  updatedAt: DateTimeTz!
+}
+
+type UserStats {
+  totalLogins: Int!
+  lastLoginAt: DateTimeTz
+  accountAgeInDays: Int!
+}
+
+input VerifyEmailInput {
+  token: String!
+}
+
+type Widget {
+  id: ID!
+  profileId: ID!
+  type: WidgetType!
+  title: String!
+  data: JSON!
+  order: Int!
+  createdAt: DateTimeTz!
+  updatedAt: DateTimeTz!
+}
+
+enum WidgetType {
+  STAT
+  CHART
+  LIST
+}
+

@@ -102,11 +102,236 @@ useCopilotAction({
 });
 ```
 
+## Better-Auth Integration
+
+This project uses **Better-Auth** with a **custom Laravel Sanctum provider** for authentication. This pattern provides excellent DX while maintaining full control over the backend.
+
+### Architecture
+
+```
+Frontend (Better-Auth) → Custom Provider → Laravel Sanctum API
+    ↓                          ↓                    ↓
+Cookie Storage          Zod Validation        MySQL/PostgreSQL
+```
+
+### Custom Provider Pattern
+
+**Provider Implementation** (`src/lib/auth/providers/sanctum.ts`):
+```typescript
+import { z } from 'zod'
+
+const LoginResponseSchema = z.object({
+  user: z.object({
+    id: z.string(),
+    email: z.string().email(),
+    name: z.string(),
+    emailVerifiedAt: z.string().nullable(),
+  }),
+  accessToken: z.string(),
+  refreshToken: z.string(),
+  expiresAt: z.number(),
+})
+
+export const sanctumProvider = {
+  async signIn(credentials: { email: string; password: string }) {
+    const response = await fetch(`${LARAVEL_API_URL}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(credentials),
+    })
+
+    if (!response.ok) {
+      throw new Error('Invalid credentials')
+    }
+
+    const data = await response.json()
+    const validated = LoginResponseSchema.parse(data) // Runtime validation!
+
+    return {
+      user: {
+        id: validated.user.id,
+        email: validated.user.email,
+        name: validated.user.name,
+        emailVerified: !!validated.user.emailVerifiedAt,
+      },
+      session: {
+        token: validated.accessToken,
+        expiresAt: validated.expiresAt,
+      },
+    }
+  },
+  // ... signUp, signOut, refreshToken
+}
+```
+
+**Client Setup** (`src/lib/auth/client.ts`):
+```typescript
+import { useAuth as useBetterAuth } from '@/lib/auth/client'
+
+export function useAuth() {
+  const { session, user, isAuthenticated, signIn, signUp, signOut } = useBetterAuth()
+
+  // session.token - JWT from Laravel Sanctum
+  // user - { id, email, name, emailVerified }
+
+  return { session, user, isAuthenticated, signIn, signUp, signOut }
+}
+```
+
+### Using Authentication
+
+**In Components**:
+```typescript
+'use client'
+
+import { useAuth } from '@/lib/auth/client'
+
+export function ProfilePage() {
+  const { user, session, isAuthenticated, signOut } = useAuth()
+
+  if (!isAuthenticated) {
+    return <div>Please log in</div>
+  }
+
+  return (
+    <div>
+      <h1>Welcome, {user?.name}</h1>
+      <p>Email: {user?.email}</p>
+      <button onClick={signOut}>Log Out</button>
+    </div>
+  )
+}
+```
+
+**In Middleware** (`src/middleware.ts`):
+```typescript
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+
+export function middleware(request: NextRequest) {
+  const sessionCookie = request.cookies.get('auth_session')
+
+  if (!sessionCookie) {
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
+
+  return NextResponse.next()
+}
+
+export const config = {
+  matcher: ['/dashboard/:path*', '/profile/:path*', '/settings/:path*'],
+}
+```
+
+### Making Authenticated API Calls
+
+**GraphQL with Authentication**:
+```typescript
+import { createClient } from 'urql'
+
+function createAuthenticatedClient(token: string) {
+  return createClient({
+    url: process.env.NEXT_PUBLIC_LARAVEL_GRAPHQL_URL!,
+    fetchOptions: {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    },
+  })
+}
+
+// Usage in components
+const { session } = useAuth()
+const client = createAuthenticatedClient(session.token)
+const [result] = useQuery({ query: PROFILE_QUERY }, { client })
+```
+
+### Session Management
+
+**Automatic Token Refresh**:
+- Better-Auth detects token expiration
+- Calls `sanctumProvider.refreshToken()` automatically
+- Updates httpOnly cookie with new token
+- Transparent to the user
+
+**Token Storage**:
+- Access tokens stored in httpOnly cookies (secure against XSS)
+- Never exposed to client JavaScript
+- Automatically included in requests by Better-Auth
+
+**Session Validation**:
+```typescript
+// Server-side session check
+import { getSession } from '@/lib/auth/server'
+
+export async function GET(request: Request) {
+  const session = await getSession(request)
+
+  if (!session) {
+    return new Response('Unauthorized', { status: 401 })
+  }
+
+  // session.token - Use for Laravel API calls
+  // session.user - User data
+}
+```
+
+### Best Practices
+
+**DO**:
+- ✅ Always use `useAuth()` hook for auth state
+- ✅ Validate Laravel API responses with Zod schemas
+- ✅ Handle token expiration gracefully (auto-refresh)
+- ✅ Use middleware for route protection
+- ✅ Store tokens in httpOnly cookies only
+
+**DON'T**:
+- ❌ Access tokens directly in client components
+- ❌ Store tokens in localStorage (XSS vulnerable)
+- ❌ Skip Zod validation of API responses
+- ❌ Implement manual token refresh logic
+- ❌ Hardcode API URLs (use env vars)
+
+### Swapping Auth Providers
+
+To swap from Laravel Sanctum to another backend (Firebase, Supabase, etc.):
+
+1. Create new provider in `src/lib/auth/providers/your-provider.ts`
+2. Implement same interface: `signIn`, `signUp`, `signOut`, `refreshToken`
+3. Update import in `src/lib/auth/client.ts`
+4. No other code changes needed!
+
+**Example - Firebase Provider**:
+```typescript
+// src/lib/auth/providers/firebase.ts
+export const firebaseProvider = {
+  async signIn({ email, password }) {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password)
+    return {
+      user: {
+        id: userCredential.user.uid,
+        email: userCredential.user.email!,
+        name: userCredential.user.displayName!,
+        emailVerified: userCredential.user.emailVerified,
+      },
+      session: {
+        token: await userCredential.user.getIdToken(),
+        expiresAt: Date.now() + 3600000,
+      },
+    }
+  },
+  // ... rest of methods
+}
+```
+
 ## Configuration
 
 ### Environment Variables
 
 Required:
+- `NEXT_PUBLIC_LARAVEL_GRAPHQL_URL` - Laravel GraphQL API endpoint
+- `NEXT_PUBLIC_APP_URL` - Frontend application URL
 - `OPENAI_API_KEY` or `OPENROUTER_API_KEY` - LLM provider credentials
 
 Optional:

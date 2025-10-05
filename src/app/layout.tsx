@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { CopilotKit } from "@copilotkit/react-core";
+import { GraphQLProvider } from "./components/providers/urql-provider";
 import "./assets/css/globals.css";
 import "@copilotkit/react-ui/styles.css";
 
@@ -27,9 +28,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <CopilotKit runtimeUrl="/api/copilotkit" agent="weatherAgent">
-          {children}
-        </CopilotKit>
+        <GraphQLProvider>
+          <CopilotKit runtimeUrl="/api/copilotkit" agent="weatherAgent">
+            {children}
+          </CopilotKit>
+        </GraphQLProvider>
       </body>
     </html>
   );

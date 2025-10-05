@@ -104,3 +104,125 @@ function getWeatherCondition(code: number): string {
   };
   return conditions[code] || 'Unknown';
 }
+
+// Profile tools
+export const getProfileCompletionTool = createTool({
+  id: 'get-profile-completion',
+  description: 'Analyze profile completion percentage and provide recommendations',
+  inputSchema: z.object({
+    name: z.string().nullable(),
+    bio: z.string().nullable(),
+    location: z.string().nullable(),
+    website: z.string().nullable(),
+    avatar_url: z.string().nullable(),
+  }),
+  outputSchema: z.object({
+    completion_percentage: z.number().min(0).max(100),
+    missing_fields: z.array(z.string()),
+    recommendations: z.array(z.string()),
+  }),
+  execute: async ({ context }) => {
+    const fields = [
+      { key: 'name', label: 'Name' },
+      { key: 'bio', label: 'Bio' },
+      { key: 'location', label: 'Location' },
+      { key: 'website', label: 'Website' },
+      { key: 'avatar_url', label: 'Profile Picture' },
+    ]
+
+    const filledFields = fields.filter((field) => {
+      const value = context[field.key as keyof typeof context]
+      return value !== null && value !== ''
+    })
+
+    const completion_percentage = Math.round((filledFields.length / fields.length) * 100)
+    const missing_fields = fields
+      .filter((field) => {
+        const value = context[field.key as keyof typeof context]
+        return value === null || value === ''
+      })
+      .map((field) => field.label)
+
+    const recommendations = []
+    if (missing_fields.includes('Name')) {
+      recommendations.push('Add your name to personalize your profile')
+    }
+    if (missing_fields.includes('Bio')) {
+      recommendations.push('Write a bio to tell others about yourself')
+    }
+    if (missing_fields.includes('Profile Picture')) {
+      recommendations.push('Upload a profile picture to make your profile more recognizable')
+    }
+    if (missing_fields.includes('Location')) {
+      recommendations.push('Add your location to connect with people nearby')
+    }
+    if (missing_fields.includes('Website')) {
+      recommendations.push('Share your website or portfolio link')
+    }
+
+    return {
+      completion_percentage,
+      missing_fields,
+      recommendations,
+    }
+  },
+})
+
+export const suggestBioImprovementsTool = createTool({
+  id: 'suggest-bio-improvements',
+  description: 'Analyze user bio and suggest improvements',
+  inputSchema: z.object({
+    bio: z.string(),
+  }),
+  outputSchema: z.object({
+    suggestions: z.array(z.string()),
+    tone: z.enum(['professional', 'casual', 'creative', 'minimal']),
+    length_assessment: z.enum(['too_short', 'good', 'too_long']),
+  }),
+  execute: async ({ context }) => {
+    const bioLength = context.bio.length
+    const suggestions = []
+
+    // Length assessment
+    let length_assessment: 'too_short' | 'good' | 'too_long'
+    if (bioLength < 50) {
+      length_assessment = 'too_short'
+      suggestions.push('Consider expanding your bio to at least 50 characters')
+    } else if (bioLength > 300) {
+      length_assessment = 'too_long'
+      suggestions.push('Try to keep your bio concise (under 300 characters)')
+    } else {
+      length_assessment = 'good'
+    }
+
+    // Tone detection (simple heuristic)
+    const hasEmojis = /[\u{1F300}-\u{1F9FF}]/u.test(context.bio)
+    const hasProfessionalWords = /(experienced|professional|expert|specialist)/i.test(context.bio)
+    const hasCreativeWords = /(creative|passionate|innovative|enthusiast)/i.test(context.bio)
+
+    let tone: 'professional' | 'casual' | 'creative' | 'minimal'
+    if (hasProfessionalWords) {
+      tone = 'professional'
+    } else if (hasCreativeWords) {
+      tone = 'creative'
+    } else if (hasEmojis || bioLength < 100) {
+      tone = 'casual'
+    } else {
+      tone = 'minimal'
+    }
+
+    // General suggestions
+    if (!context.bio.includes('.') && bioLength > 50) {
+      suggestions.push('Add punctuation to improve readability')
+    }
+    if (suggestions.length === 0) {
+      suggestions.push('Your bio looks great!')
+    }
+
+    return {
+      suggestions,
+      tone,
+      length_assessment,
+    }
+  },
+})

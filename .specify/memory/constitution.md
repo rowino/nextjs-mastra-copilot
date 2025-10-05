@@ -1,12 +1,14 @@
 <!--
 Sync Impact Report:
-Version: 1.1.0
+Version: 1.3.0
 Changes:
-- Updated Code Organization Standards to reflect Next.js app directory structure
-- Added detailed constraints for organizing frontend code (components, hooks, contexts, utils, services, constants, assets, layouts)
-- Preserved lib/ directory for shared utilities
+- Added VI. UI Component Standards principle requiring shadcn/ui usage
+- Mandates using shadcn/ui components for common UI patterns (buttons, forms, dropdowns, etc.)
+- Custom components only when shadcn/ui doesn't provide the pattern
 
 Previous versions:
+- 1.2.0: Added src/app/contracts/ directory for Zod schemas and API contracts
+- 1.1.0: Updated Code Organization Standards to reflect Next.js app directory structure
 - 1.0.0: Initial constitution creation
 
 Templates Status:
@@ -64,6 +66,31 @@ Core functionality MUST work without JavaScript where possible. UI components MU
 
 **Rationale**: Demonstrates modern Next.js patterns (App Router, Server Components). Ensures accessibility and performance baselines.
 
+### VI. UI Component Standards
+All UI components MUST use shadcn/ui when a component exists for the pattern. Custom UI components are only permitted when shadcn/ui does not provide the required pattern or when significant customization beyond shadcn's flexibility is needed.
+
+**Required shadcn/ui usage for**:
+- Buttons, inputs, forms, labels
+- Dropdowns, selects, comboboxes
+- Dialogs, modals, popovers, tooltips
+- Cards, badges, alerts
+- Tables, tabs, accordions
+- Navigation menus, breadcrumbs
+- Date pickers, calendars
+- Command palette, search
+
+**Custom components allowed for**:
+- Domain-specific visualizations (charts unique to your app)
+- AI-specific UI (CopilotKit components, generative UI renders)
+- Highly branded/stylized components beyond shadcn customization
+
+**Installation process**:
+```bash
+npx shadcn@latest add <component-name>
+```
+
+**Rationale**: Ensures consistent design system, accessibility compliance (shadcn uses Radix UI primitives), and faster development. Demonstrates modern component architecture and design system integration in starter template.
+
 ## Development Workflow
 
 ### Feature Development Process
@@ -85,6 +112,7 @@ src/
 ├── app/                  # Next.js App Router
 │   ├── api/              # API routes (CopilotKit integration)
 │   ├── components/       # Reusable UI components
+│   ├── contracts/        # Zod schemas for API contracts and data models
 │   ├── hooks/            # Custom React hooks
 │   ├── contexts/         # React context providers
 │   ├── utils/            # Utility functions and helpers (shadcn/ui, etc.)
@@ -99,6 +127,7 @@ src/
 **Constraints**:
 - Agent definitions belong in `src/mastra/agents/`
 - Tool implementations in `src/mastra/tools/`
+- **Zod schemas and contracts belong in `src/app/contracts/`** (organized by domain/feature)
 - API routes only for CopilotKit runtime and external integrations
 - No business logic in API routes (delegate to tools/agents)
 - UI components in `src/app/components/` (organized by feature or ui/)
@@ -130,6 +159,7 @@ src/
 - [ ] Environment variables documented in README
 - [ ] Debug logging works with `LOG_LEVEL=debug`
 - [ ] No `@claude` comments remain in code
+- [ ] UI components use shadcn/ui when available
 
 ### Code Review Requirements
 - Constitutional compliance (AI-first, type-safe, observable)
@@ -168,4 +198,4 @@ src/
 ### Runtime Development Guidance
 Agent-specific instructions for active development sessions are maintained separately (e.g., `CLAUDE.md`, `.github/copilot-instructions.md`). These files reference this constitution but contain tactical, session-specific context that changes frequently.
 
-**Version**: 1.1.0 | **Ratified**: 2025-10-02 | **Last Amended**: 2025-10-02
+**Version**: 1.3.0 | **Ratified**: 2025-10-02 | **Last Amended**: 2025-10-02
