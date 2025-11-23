@@ -23,3 +23,11 @@ export function getMastraInstance(d1Database?: D1Database) {
     }),
   });
 }
+
+// Export for Mastra CLI - uses in-memory storage for dev tools
+export const mastra = new Mastra({
+  agents: {},
+  logger: new ConsoleLogger({
+    level: LOG_LEVEL,
+  }),
+});

@@ -14,7 +14,8 @@
     {
       "binding": "D1Database",
       "database_name": "mastra-db",
-      "database_id": "9c205dc3-f908-4a2f-b025-12d59ea40000"
+      "database_id": "9c205dc3-f908-4a2f-b025-12d59ea40000",
+      "migrations_dir": "drizzle/migrations"
     }
   ]
 }
