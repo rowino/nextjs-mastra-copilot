@@ -8,13 +8,35 @@ This is a **starter template** for building AI agents using Mastra and CopilotKi
 
 ## Development Commands
 
+### Fast Development with Full D1 Access (Recommended)
 ```bash
-# Start development (Cloudflare Workers preview with D1)
+# Start Next.js dev server with hot reload + Cloudflare context
+# Access at http://localhost:3000
+# Features: HMR, D1 database, auth, agent memory
 pnpm dev
 
-# Start with debug logging enabled
+# With debug logging
 pnpm dev:debug
+```
 
+**What you get:**
+- ✅ Instant hot module replacement (< 1 second updates)
+- ✅ Full D1 database access for auth and agent memory
+- ✅ All Cloudflare bindings available
+- ✅ Next.js Turbopack for fastest builds
+
+### Production-Like Testing
+```bash
+# Build and run with Cloudflare Workers (for production parity)
+# Requires rebuild on code changes (no HMR)
+# Access at http://localhost:8787
+pnpm dev:cf
+```
+
+Use this only when you need to test the exact production build before deploying.
+
+### Production Commands
+```bash
 # Build for production
 pnpm build
 
@@ -30,6 +52,12 @@ pnpm cf-typegen
 # Lint
 pnpm lint
 ```
+
+### Development Workflow
+
+**Daily development:** Use `pnpm dev` for everything - you get instant HMR with full D1/auth/agent functionality.
+
+**Pre-deployment testing:** Use `pnpm dev:cf` or `pnpm preview` to verify the production build works correctly before deploying.
 
 ## Architecture
 

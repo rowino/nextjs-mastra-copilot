@@ -1,0 +1,12 @@
+   ▲ Next.js 16.0.3 (Turbopack)
+   - Environments: .env
+
+   Creating an optimized production build ...
+
+> Build error occurred
+Error: Cannot find module 'next/dist/compiled/babel/code-frame'
+Require stack:
+- /Users/raphael/work/projects/rowino/starters/mastra/node_modules/.pnpm/next@16.0.3_@babel+core@7.28.5_@opentelemetry+api@1.9.0_@playwright+test@1.55.1_react-dom@19._l7wxd4kbvzd4o5svadiishsnxi/node_modules/next/dist/shared/lib/turbopack/utils.js
+- /Users/raphael/work/projects/rowino/starters/mastra/node_modules/.pnpm/next@16.0.3_@babel+core@7.28.5_@opentelemetry+api@1.9.0_@playwright+test@1.55.1_react-dom@19._l7wxd4kbvzd4o5svadiishsnxi/node_modules/next/dist/build/turbopack-build/impl.js
+- /Users/raphael/work/projects/rowino/starters/mastra/node_modules/.pnpm/next@16.0.3_@babel+core@7.28.5_@opentelemetry+api@1.9.0_@playwright+test@1.55.1_react-dom@19._l7wxd4kbvzd4o5svadiishsnxi/node_modules/next/dist/compiled/jest-worker/threadChild.js
+    at ignore-listed frames
