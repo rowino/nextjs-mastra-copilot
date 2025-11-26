@@ -82,7 +82,7 @@ export const member = sqliteTable("member", {
 	id: text("id").primaryKey(),
 	organizationId: text("organizationId").notNull().references(() => organization.id, { onDelete: "cascade" }),
 	userId: text("userId").notNull().references(() => user.id, { onDelete: "cascade" }),
-	role: text("role").notNull(),
+	role: text("role", { enum: ["admin", "user"] }).notNull(),
 	createdAt: integer("createdAt", { mode: "timestamp" }).notNull(),
 });
 

@@ -37,3 +37,14 @@ export async function validateOrgOwnership<T extends { orgId: string }>(
 export function generateId(prefix: string): string {
   return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
 }
+
+export function hasAdminRole(): boolean {
+  const context = getAuthContext();
+  return context.roles.includes("admin");
+}
+
+export function requireAdminRole(): void {
+  if (!hasAdminRole()) {
+    throw new OrgPermissionError("Admin role required for this operation");
+  }
+}

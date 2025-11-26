@@ -4,7 +4,7 @@ export type AuthContext = {
   userId: string;
   email: string;
   orgId: string;
-  roles: string[];
+  roles: ("admin" | "user")[];
 };
 
 export const authContextStorage = new AsyncLocalStorage<AuthContext>();
