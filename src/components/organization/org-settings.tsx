@@ -24,9 +24,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Trash2 } from "lucide-react";
+import { Trash2, Building2 } from "lucide-react";
 
 const orgSettingsSchema = z.object({
   name: z.string().min(1, "Organization name is required"),
@@ -130,96 +129,96 @@ export function OrgSettings({ organization }: OrgSettingsProps) {
 
   return (
     <>
-      <Card>
-        <CardHeader>
-          <CardTitle>General Settings</CardTitle>
-          <CardDescription>
-            Update your organization&apos;s basic information
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Organization Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Acme Inc."
-                        {...field}
-                        disabled={!isAdmin || isSaving}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="slug"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Slug</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="acme-inc"
-                        {...field}
-                        disabled={!isAdmin || isSaving}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="logo"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Logo URL (optional)</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="https://example.com/logo.png"
-                        {...field}
-                        disabled={!isAdmin || isSaving}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {isAdmin && (
-                <div className="flex justify-between items-center pt-4">
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    onClick={() => setShowDeleteDialog(true)}
-                    disabled={isSaving}
-                  >
-                    <Trash2 className="h-4 w-4 mr-2" />
-                    Delete Organization
-                  </Button>
-                  <Button type="submit" disabled={isSaving}>
-                    {isSaving ? "Saving..." : "Save Changes"}
-                  </Button>
-                </div>
+      <div className="border border-[#2a2a2a] rounded-lg p-6">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[#888888] font-mono uppercase text-xs tracking-wider">Organization Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Acme Inc."
+                      {...field}
+                      disabled={!isAdmin || isSaving}
+                      className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] placeholder:text-[#888888] focus:border-[#00ff88] focus:ring-1 focus:ring-[#00ff88] font-mono transition-colors duration-150 ease-linear"
+                    />
+                  </FormControl>
+                  <FormMessage className="text-[#ff4444] font-mono text-xs" />
+                </FormItem>
               )}
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+            />
+
+            <FormField
+              control={form.control}
+              name="slug"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[#888888] font-mono uppercase text-xs tracking-wider">Slug</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="acme-inc"
+                      {...field}
+                      disabled={!isAdmin || isSaving}
+                      className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] placeholder:text-[#888888] focus:border-[#00ff88] focus:ring-1 focus:ring-[#00ff88] font-mono transition-colors duration-150 ease-linear"
+                    />
+                  </FormControl>
+                  <FormMessage className="text-[#ff4444] font-mono text-xs" />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="logo"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[#888888] font-mono uppercase text-xs tracking-wider">Logo URL (optional)</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="https://example.com/logo.png"
+                      {...field}
+                      disabled={!isAdmin || isSaving}
+                      className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] placeholder:text-[#888888] focus:border-[#00ff88] focus:ring-1 focus:ring-[#00ff88] font-mono transition-colors duration-150 ease-linear"
+                    />
+                  </FormControl>
+                  <FormMessage className="text-[#ff4444] font-mono text-xs" />
+                </FormItem>
+              )}
+            />
+
+            {isAdmin && (
+              <div className="flex justify-between items-center pt-4 border-t border-[#2a2a2a]">
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={() => setShowDeleteDialog(true)}
+                  disabled={isSaving}
+                  className="bg-[#ff4444] hover:bg-[#ff4444]/90 text-[#0a0a0a] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={isSaving}
+                  className="bg-[#00ff88] text-[#0a0a0a] hover:bg-[#00ff88]/90 font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
+                >
+                  {isSaving ? "Saving..." : "Save Changes"}
+                </Button>
+              </div>
+            )}
+          </form>
+        </Form>
+      </div>
 
       <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <DialogContent>
+        <DialogContent className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] font-mono">
           <DialogHeader>
-            <DialogTitle>Delete Organization</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-[#e5e5e5] font-mono uppercase tracking-wider">Delete Organization</DialogTitle>
+            <DialogDescription className="text-[#888888] font-mono">
               Are you sure you want to delete this organization? This action
               cannot be undone and will remove all members and data.
             </DialogDescription>
@@ -229,6 +228,7 @@ export function OrgSettings({ organization }: OrgSettingsProps) {
               variant="outline"
               onClick={() => setShowDeleteDialog(false)}
               disabled={isDeleting}
+              className="bg-transparent hover:bg-[#2a2a2a] border-[#2a2a2a] text-[#e5e5e5] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
             >
               Cancel
             </Button>
@@ -236,6 +236,7 @@ export function OrgSettings({ organization }: OrgSettingsProps) {
               variant="destructive"
               onClick={handleDelete}
               disabled={isDeleting}
+              className="bg-[#ff4444] hover:bg-[#ff4444]/90 text-[#0a0a0a] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
             >
               {isDeleting ? "Deleting..." : "Delete Organization"}
             </Button>

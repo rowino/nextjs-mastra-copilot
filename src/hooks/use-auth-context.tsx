@@ -28,21 +28,33 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
+  const [currentOrgId, setCurrentOrgId] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
   const { data: session } = authClient.useSession();
 
-  const fetchOrganizations = async () => {
+  const fetchData = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch("/api/organization");
-      if (!response.ok) {
-        throw new Error("Failed to fetch organizations");
+
+      // Fetch organizations and current context in parallel
+      const [orgsResponse, currentResponse] = await Promise.all([
+        fetch("/api/organization"),
+        fetch("/api/organization/current"),
+      ]);
+
+      if (!orgsResponse.ok || !currentResponse.ok) {
+        throw new Error("Failed to fetch organization data");
       }
-      const data = (await response.json()) as { organizations: Organization[] };
-      setOrganizations(data.organizations || []);
+
+      const orgsData = (await orgsResponse.json()) as { organizations: Organization[] };
+      const currentData = (await currentResponse.json()) as { orgId: string };
+
+      setOrganizations(orgsData.organizations || []);
+      setCurrentOrgId(currentData.orgId || "");
     } catch (error) {
-      console.error("Error fetching organizations:", error);
+      console.error("Error fetching organization data:", error);
       setOrganizations([]);
+      setCurrentOrgId("");
     } finally {
       setIsLoading(false);
     }
@@ -50,7 +62,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (session?.user) {
-      fetchOrganizations();
+      fetchData();
     } else {
       setIsLoading(false);
     }
@@ -68,7 +80,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           isAdmin: false,
           isLoading: false,
           currentOrganization: null,
-          refetch: fetchOrganizations,
+          refetch: fetchData,
         }}
       >
         {children}
@@ -77,7 +89,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const user = session.user;
-  const currentOrgId = (user as { orgId?: string }).orgId || "";
   const currentOrg = organizations.find((org) => org.id === currentOrgId) || null;
   const roles = currentOrg ? [currentOrg.role] : [];
   const isAdmin = roles.includes("admin");
@@ -91,7 +102,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     isAdmin,
     isLoading,
     currentOrganization: currentOrg,
-    refetch: fetchOrganizations,
+    refetch: fetchData,
   };
 
   return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;

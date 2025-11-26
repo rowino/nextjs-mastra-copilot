@@ -27,7 +27,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Trash2 } from "lucide-react";
+import { Trash2, Users } from "lucide-react";
 
 type Member = {
   id: string;
@@ -135,21 +135,21 @@ export function MemberList({ orgId, members, onMembersChange }: MemberListProps)
 
   return (
     <>
-      <div className="rounded-md border">
+      <div className="border border-[#2a2a2a] rounded-lg overflow-hidden">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Joined</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+            <TableRow className="border-[#2a2a2a] hover:bg-transparent">
+              <TableHead className="text-[#888888] font-mono uppercase tracking-wider text-xs">Name</TableHead>
+              <TableHead className="text-[#888888] font-mono uppercase tracking-wider text-xs">Email</TableHead>
+              <TableHead className="text-[#888888] font-mono uppercase tracking-wider text-xs">Role</TableHead>
+              <TableHead className="text-[#888888] font-mono uppercase tracking-wider text-xs">Joined</TableHead>
+              <TableHead className="text-right text-[#888888] font-mono uppercase tracking-wider text-xs">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {members.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={5} className="text-center text-muted-foreground">
+              <TableRow className="border-[#2a2a2a] hover:bg-transparent">
+                <TableCell colSpan={5} className="text-center text-[#888888] font-mono">
                   No members found
                 </TableCell>
               </TableRow>
@@ -159,17 +159,17 @@ export function MemberList({ orgId, members, onMembersChange }: MemberListProps)
                 return (
                   <TableRow
                     key={member.id}
-                    className={isSelf ? "bg-accent/50" : ""}
+                    className={`border-[#2a2a2a] hover:border-l-4 hover:border-l-[#00ff88] transition-all duration-150 ease-linear ${isSelf ? "bg-[#141414]" : ""}`}
                   >
-                    <TableCell className="font-medium">
+                    <TableCell className="font-mono text-[#e5e5e5]">
                       {member.name || "—"}
                       {isSelf && (
-                        <span className="ml-2 text-xs text-muted-foreground">
+                        <span className="ml-2 text-xs text-[#888888]">
                           (You)
                         </span>
                       )}
                     </TableCell>
-                    <TableCell>{member.email}</TableCell>
+                    <TableCell className="font-mono text-[#e5e5e5]">{member.email}</TableCell>
                     <TableCell>
                       {isAdmin && !isSelf ? (
                         <Select
@@ -179,19 +179,19 @@ export function MemberList({ orgId, members, onMembersChange }: MemberListProps)
                           }
                           disabled={updatingMemberId === member.id}
                         >
-                          <SelectTrigger className="w-[120px]">
+                          <SelectTrigger className="w-[120px] bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] font-mono uppercase text-xs tracking-wider focus:border-[#00ff88]">
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="admin">Admin</SelectItem>
-                            <SelectItem value="user">User</SelectItem>
+                          <SelectContent className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5]">
+                            <SelectItem value="admin" className="text-[#e5e5e5] font-mono uppercase text-xs focus:bg-[#2a2a2a] focus:text-[#00ff88]">Admin</SelectItem>
+                            <SelectItem value="user" className="text-[#e5e5e5] font-mono uppercase text-xs focus:bg-[#2a2a2a] focus:text-[#00ff88]">User</SelectItem>
                           </SelectContent>
                         </Select>
                       ) : (
-                        <span className="capitalize">{member.role}</span>
+                        <span className="uppercase text-[#888888] font-mono text-xs tracking-wider">{member.role}</span>
                       )}
                     </TableCell>
-                    <TableCell>{formatDate(member.createdAt)}</TableCell>
+                    <TableCell className="text-[#888888] font-mono text-xs">{formatDate(member.createdAt)}</TableCell>
                     <TableCell className="text-right">
                       {(isAdmin || isSelf) && (
                         <Button
@@ -202,8 +202,9 @@ export function MemberList({ orgId, members, onMembersChange }: MemberListProps)
                             setShowRemoveDialog(true);
                           }}
                           disabled={!isAdmin && !isSelf}
+                          className="text-[#ff4444] hover:text-[#ff4444] hover:bg-[#ff4444]/10 transition-colors duration-150 ease-linear"
                         >
-                          <Trash2 className="h-4 w-4 text-destructive" />
+                          <Trash2 className="h-4 w-4" />
                         </Button>
                       )}
                     </TableCell>
@@ -216,10 +217,10 @@ export function MemberList({ orgId, members, onMembersChange }: MemberListProps)
       </div>
 
       <Dialog open={showRemoveDialog} onOpenChange={setShowRemoveDialog}>
-        <DialogContent>
+        <DialogContent className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] font-mono">
           <DialogHeader>
-            <DialogTitle>Remove Member</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-[#e5e5e5] font-mono uppercase tracking-wider">Remove Member</DialogTitle>
+            <DialogDescription className="text-[#888888] font-mono">
               {removingMemberId &&
               members.find((m) => m.id === removingMemberId)?.userId === userId
                 ? "Are you sure you want to leave this organization?"
@@ -233,10 +234,15 @@ export function MemberList({ orgId, members, onMembersChange }: MemberListProps)
                 setShowRemoveDialog(false);
                 setRemovingMemberId(null);
               }}
+              className="bg-transparent hover:bg-[#2a2a2a] border-[#2a2a2a] text-[#e5e5e5] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
             >
               Cancel
             </Button>
-            <Button variant="destructive" onClick={handleRemoveMember}>
+            <Button
+              variant="destructive"
+              onClick={handleRemoveMember}
+              className="bg-[#ff4444] hover:bg-[#ff4444]/90 text-[#0a0a0a] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
+            >
               {removingMemberId &&
               members.find((m) => m.id === removingMemberId)?.userId === userId
                 ? "Leave Organization"

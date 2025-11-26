@@ -31,7 +31,18 @@ export async function authenticateRequest(): Promise<AuthResult> {
 
   const auth = getAuth(d1Database);
   const headersList = await headers();
+
+  // Debug logging
+  if (process.env.NODE_ENV === "development") {
+    console.log("API Auth - Headers:", Object.fromEntries(headersList.entries()));
+  }
+
   const session = await auth.api.getSession({ headers: headersList });
+
+  // Debug logging
+  if (process.env.NODE_ENV === "development") {
+    console.log("API Auth - Session:", session ? "Found" : "Not found");
+  }
 
   if (!session?.user) {
     throw new Error("Unauthorized");

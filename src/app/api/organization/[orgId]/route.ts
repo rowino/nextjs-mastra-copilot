@@ -74,7 +74,6 @@ export async function GET(req: NextRequest, context: RouteContext) {
 export async function PATCH(req: NextRequest, context: RouteContext) {
   try {
     const authContext = await authenticateRequest();
-    requireAdminRole();
     const { orgId } = await context.params;
     const body = await req.json();
     const updates = updateOrgSchema.parse(body);
@@ -159,7 +158,6 @@ export async function PATCH(req: NextRequest, context: RouteContext) {
 export async function DELETE(req: NextRequest, context: RouteContext) {
   try {
     const authContext = await authenticateRequest();
-    requireAdminRole();
     const { orgId } = await context.params;
     const db = getOrgScopedDb();
 

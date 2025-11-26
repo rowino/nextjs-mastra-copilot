@@ -7,7 +7,7 @@ import { OrgSettings } from "@/components/organization/org-settings";
 import { MemberList } from "@/components/organization/member-list";
 import { InviteMember } from "@/components/organization/invite-member";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent } from "@/components/ui/card";
+import { Building2, Users, Loader2, UserPlus } from "lucide-react";
 
 type Organization = {
   id: string;
@@ -32,6 +32,7 @@ export default function OrganizationSettingsPage() {
   const [organization, setOrganization] = useState<Organization | null>(null);
   const [members, setMembers] = useState<Member[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("general");
 
   const fetchOrganization = async () => {
     if (!orgId) return;
@@ -79,67 +80,90 @@ export default function OrganizationSettingsPage() {
 
   if (authLoading || isLoading) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="space-y-6">
-          <div className="h-8 w-64 bg-white/10 rounded animate-pulse" />
-          <div className="h-96 bg-white/10 rounded animate-pulse" />
-        </div>
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="size-8 animate-spin text-[#00ff88]" />
       </div>
     );
   }
 
   if (!organization) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Card>
-          <CardContent className="py-8 text-center text-muted-foreground">
-            Organization not found
-          </CardContent>
-        </Card>
+      <div className="container max-w-5xl mx-auto py-8 px-4">
+        <div className="border border-[#2a2a2a] rounded-lg p-8 text-center">
+          <p className="text-[#888888] font-mono">Organization not found</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-white">Organization Settings</h1>
-          <p className="text-white/60 mt-2">
-            Manage your organization settings and members
-          </p>
-        </div>
-
-        <Tabs defaultValue="general" className="space-y-6">
-          <TabsList>
-            <TabsTrigger value="general">General</TabsTrigger>
-            <TabsTrigger value="members">Members</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="general" className="space-y-6">
-            <OrgSettings organization={organization} />
-          </TabsContent>
-
-          <TabsContent value="members" className="space-y-6">
-            <div className="grid gap-6 md:grid-cols-3">
-              <div className="md:col-span-2 space-y-6">
-                <Card>
-                  <CardContent className="pt-6">
-                    <MemberList
-                      orgId={orgId}
-                      members={members}
-                      onMembersChange={fetchMembers}
-                    />
-                  </CardContent>
-                </Card>
-              </div>
-              <div>
-                <InviteMember orgId={orgId} onMemberAdded={fetchMembers} />
-              </div>
-            </div>
-          </TabsContent>
-        </Tabs>
+    <div className="container max-w-5xl mx-auto py-8 px-4">
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-[#00ff88] font-mono uppercase tracking-wider">Organization</h1>
+        <p className="text-[#888888] mt-2 font-mono text-sm">
+          Manage your organization settings and members
+        </p>
       </div>
+
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="bg-transparent border-b border-[#2a2a2a] rounded-none p-0 mb-8 h-auto gap-0">
+          <TabsTrigger
+            value="general"
+            className="bg-transparent data-[state=active]:bg-transparent text-[#888888] data-[state=active]:text-[#00ff88] border-b-2 border-transparent data-[state=active]:border-[#00ff88] rounded-none px-6 py-3 font-mono uppercase text-xs tracking-wider transition-all duration-150 ease-linear relative -mb-[1px]"
+          >
+            <Building2 className="size-4 mr-2" />
+            General
+          </TabsTrigger>
+          <TabsTrigger
+            value="members"
+            className="bg-transparent data-[state=active]:bg-transparent text-[#888888] data-[state=active]:text-[#00ff88] border-b-2 border-transparent data-[state=active]:border-[#00ff88] rounded-none px-6 py-3 font-mono uppercase text-xs tracking-wider transition-all duration-150 ease-linear relative -mb-[1px]"
+          >
+            <Users className="size-4 mr-2" />
+            Members
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="general" className="space-y-8">
+          {/* General Settings Section */}
+          <div className="relative">
+            <div className="absolute inset-x-0 top-3 border-t border-[#2a2a2a]" />
+            <h2 className="relative inline-block bg-[#0a0a0a] pr-4 text-sm font-mono uppercase tracking-wider text-[#888888]">
+              <Building2 className="inline-block size-4 mr-2 mb-1" />
+              Organization Details
+            </h2>
+          </div>
+
+          <OrgSettings organization={organization} />
+        </TabsContent>
+
+        <TabsContent value="members" className="space-y-8">
+          {/* Team Roster Section */}
+          <div className="relative">
+            <div className="absolute inset-x-0 top-3 border-t border-[#2a2a2a]" />
+            <h2 className="relative inline-block bg-[#0a0a0a] pr-4 text-sm font-mono uppercase tracking-wider text-[#888888]">
+              <Users className="inline-block size-4 mr-2 mb-1" />
+              Team Roster
+            </h2>
+          </div>
+
+          <MemberList
+            orgId={orgId}
+            members={members}
+            onMembersChange={fetchMembers}
+          />
+
+          {/* Invite Member Section */}
+          <div className="relative">
+            <div className="absolute inset-x-0 top-3 border-t border-[#2a2a2a]" />
+            <h2 className="relative inline-block bg-[#0a0a0a] pr-4 text-sm font-mono uppercase tracking-wider text-[#888888]">
+              <UserPlus className="inline-block size-4 mr-2 mb-1" />
+              Add Member
+            </h2>
+          </div>
+
+          <InviteMember orgId={orgId} onMemberAdded={fetchMembers} />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

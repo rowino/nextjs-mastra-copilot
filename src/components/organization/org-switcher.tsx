@@ -17,7 +17,7 @@ import { CreateOrgModal } from "./create-org-modal";
 import { toast } from "sonner";
 
 export function OrgSwitcher() {
-  const { currentOrganization, organizations, isLoading } = useAuthContext();
+  const { currentOrganization, organizations, isLoading, refetch } = useAuthContext();
   const [isSwitching, setIsSwitching] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
@@ -33,14 +33,21 @@ export function OrgSwitcher() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to switch organization");
+        const error = await response.json();
+        throw new Error(error.error || "Failed to switch organization");
       }
 
       toast.success("Switched organization");
+
+      // Refetch auth context instead of full page reload
+      await refetch();
+
+      // Optional: reload if you want to reset page state
       window.location.reload();
     } catch (error) {
       console.error("Error switching organization:", error);
-      toast.error("Failed to switch organization");
+      toast.error(error instanceof Error ? error.message : "Failed to switch organization");
+    } finally {
       setIsSwitching(false);
     }
   };

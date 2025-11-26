@@ -22,7 +22,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { UserPlus } from "lucide-react";
 
@@ -89,68 +88,63 @@ export function InviteMember({ orgId, onMemberAdded }: InviteMemberProps) {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Invite Member</CardTitle>
-        <CardDescription>
-          Add a new member to your organization by email address
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email Address</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="user@example.com"
-                      {...field}
-                      disabled={isInviting}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-3 items-end">
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem className="flex-1">
+              <FormLabel className="text-[#888888] font-mono uppercase text-xs tracking-wider">Email Address</FormLabel>
+              <FormControl>
+                <Input
+                  type="email"
+                  placeholder="user@example.com"
+                  {...field}
+                  disabled={isInviting}
+                  className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] placeholder:text-[#888888] focus:border-[#00ff88] focus:ring-1 focus:ring-[#00ff88] font-mono transition-colors duration-150 ease-linear"
+                />
+              </FormControl>
+              <FormMessage className="text-[#ff4444] font-mono text-xs" />
+            </FormItem>
+          )}
+        />
 
-            <FormField
-              control={form.control}
-              name="role"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Role</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    disabled={isInviting}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a role" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="user">User</SelectItem>
-                      <SelectItem value="admin">Admin</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        <FormField
+          control={form.control}
+          name="role"
+          render={({ field }) => (
+            <FormItem className="w-32">
+              <FormLabel className="text-[#888888] font-mono uppercase text-xs tracking-wider">Role</FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+                disabled={isInviting}
+              >
+                <FormControl>
+                  <SelectTrigger className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] focus:border-[#00ff88] focus:ring-1 focus:ring-[#00ff88] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear">
+                    <SelectValue placeholder="Role" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5]">
+                  <SelectItem value="user" className="text-[#e5e5e5] font-mono uppercase text-xs focus:bg-[#2a2a2a] focus:text-[#00ff88]">User</SelectItem>
+                  <SelectItem value="admin" className="text-[#e5e5e5] font-mono uppercase text-xs focus:bg-[#2a2a2a] focus:text-[#00ff88]">Admin</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage className="text-[#ff4444] font-mono text-xs" />
+            </FormItem>
+          )}
+        />
 
-            <Button type="submit" disabled={isInviting} className="w-full">
-              <UserPlus className="h-4 w-4 mr-2" />
-              {isInviting ? "Inviting..." : "Invite Member"}
-            </Button>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+        <Button
+          type="submit"
+          disabled={isInviting}
+          className="bg-[#00ff88] text-[#0a0a0a] hover:bg-[#00ff88]/90 font-mono uppercase text-xs tracking-wider h-10 px-6 transition-colors duration-150 ease-linear"
+        >
+          <UserPlus className="h-4 w-4 mr-2" />
+          {isInviting ? "Inviting..." : "Invite"}
+        </Button>
+      </form>
+    </Form>
   );
 }
