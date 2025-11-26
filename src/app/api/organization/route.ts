@@ -1,4 +1,4 @@
-import { getAuthContext } from "@/lib/auth-context";
+import { authenticateRequest } from "@/lib/api-auth";
 import { getOrgScopedDb, generateId } from "@/mastra/tools/shared/org-scoped-db";
 import { organization, member, user } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
@@ -14,7 +14,7 @@ const createOrgSchema = z.object({
 // GET /api/organization - List user's organizations
 export async function GET() {
   try {
-    const context = getAuthContext();
+    const context = await authenticateRequest();
     const db = getOrgScopedDb();
 
     // Get all organizations where user is a member
@@ -45,7 +45,7 @@ export async function GET() {
 // POST /api/organization - Create new organization
 export async function POST(req: NextRequest) {
   try {
-    const context = getAuthContext();
+    const context = await authenticateRequest();
     const body = await req.json();
     const { name, slug, logo } = createOrgSchema.parse(body);
 

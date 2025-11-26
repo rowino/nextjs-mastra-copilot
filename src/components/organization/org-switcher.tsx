@@ -29,7 +29,7 @@ export function OrgSwitcher() {
       const response = await fetch("/api/organization/switch", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ organizationId: orgId }),
+        body: JSON.stringify({ orgId }),
       });
 
       if (!response.ok) {

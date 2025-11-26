@@ -1,4 +1,4 @@
-import { getAuthContext } from "@/lib/auth-context";
+import { authenticateRequest } from "@/lib/api-auth";
 import {
   getOrgScopedDb,
   requireAdminRole,
@@ -31,7 +31,7 @@ type RouteContext = {
 // GET /api/organization/[orgId]/members - List organization members
 export async function GET(req: NextRequest, context: RouteContext) {
   try {
-    const authContext = getAuthContext();
+    const authContext = await authenticateRequest();
     const { orgId } = await context.params;
     const db = getOrgScopedDb();
 
@@ -82,8 +82,8 @@ export async function GET(req: NextRequest, context: RouteContext) {
 // POST /api/organization/[orgId]/members - Invite member (admin only)
 export async function POST(req: NextRequest, context: RouteContext) {
   try {
+    const authContext = await authenticateRequest();
     requireAdminRole();
-    const authContext = getAuthContext();
     const { orgId } = await context.params;
     const body = await req.json();
     const { email, role } = inviteMemberSchema.parse(body);
@@ -189,8 +189,8 @@ export async function POST(req: NextRequest, context: RouteContext) {
 // PATCH /api/organization/[orgId]/members - Update member role (admin only)
 export async function PATCH(req: NextRequest, context: RouteContext) {
   try {
+    const authContext = await authenticateRequest();
     requireAdminRole();
-    const authContext = getAuthContext();
     const { orgId } = await context.params;
     const body = await req.json();
     const { memberId, role } = updateMemberSchema.parse(body);
@@ -311,7 +311,7 @@ export async function PATCH(req: NextRequest, context: RouteContext) {
 // DELETE /api/organization/[orgId]/members - Remove member (admin only or self)
 export async function DELETE(req: NextRequest, context: RouteContext) {
   try {
-    const authContext = getAuthContext();
+    const authContext = await authenticateRequest();
     const { orgId } = await context.params;
     const { searchParams } = new URL(req.url);
     const memberId = searchParams.get("memberId");

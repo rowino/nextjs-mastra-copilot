@@ -1,4 +1,4 @@
-import { getAuthContext } from "@/lib/auth-context";
+import { authenticateRequest } from "@/lib/api-auth";
 import {
   getOrgScopedDb,
   requireAdminRole,
@@ -23,7 +23,7 @@ type RouteContext = {
 // GET /api/organization/[orgId] - Get organization details
 export async function GET(req: NextRequest, context: RouteContext) {
   try {
-    const authContext = getAuthContext();
+    const authContext = await authenticateRequest();
     const { orgId } = await context.params;
     const db = getOrgScopedDb();
 
@@ -73,8 +73,8 @@ export async function GET(req: NextRequest, context: RouteContext) {
 // PATCH /api/organization/[orgId] - Update organization (admin only)
 export async function PATCH(req: NextRequest, context: RouteContext) {
   try {
+    const authContext = await authenticateRequest();
     requireAdminRole();
-    const authContext = getAuthContext();
     const { orgId } = await context.params;
     const body = await req.json();
     const updates = updateOrgSchema.parse(body);
@@ -158,8 +158,8 @@ export async function PATCH(req: NextRequest, context: RouteContext) {
 // DELETE /api/organization/[orgId] - Delete organization (admin only)
 export async function DELETE(req: NextRequest, context: RouteContext) {
   try {
+    const authContext = await authenticateRequest();
     requireAdminRole();
-    const authContext = getAuthContext();
     const { orgId } = await context.params;
     const db = getOrgScopedDb();
 

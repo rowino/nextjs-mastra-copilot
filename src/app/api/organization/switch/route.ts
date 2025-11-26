@@ -1,4 +1,5 @@
-import { getAuthContext, setAuthContext } from "@/lib/auth-context";
+import { authenticateRequest } from "@/lib/api-auth";
+import { setAuthContext } from "@/lib/auth-context";
 import { getOrgScopedDb } from "@/mastra/tools/shared/org-scoped-db";
 import { member } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
@@ -12,7 +13,7 @@ const switchOrgSchema = z.object({
 // POST /api/organization/switch - Switch active organization
 export async function POST(req: NextRequest) {
   try {
-    const context = getAuthContext();
+    const context = await authenticateRequest();
     const body = await req.json();
     const { orgId } = switchOrgSchema.parse(body);
 
