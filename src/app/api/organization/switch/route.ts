@@ -1,4 +1,4 @@
-import { authenticateRequest } from "@/lib/api-auth";
+import { authenticateRequest, setActiveOrganization } from "@/lib/api-auth";
 import { setAuthContext } from "@/lib/auth-context";
 import { getOrgScopedDb } from "@/mastra/tools/shared/org-scoped-db";
 import { member } from "@/db/schema";
@@ -37,6 +37,9 @@ export async function POST(req: NextRequest) {
         { status: 403 }
       );
     }
+
+    // Update cookie to persist organization selection
+    await setActiveOrganization(orgId);
 
     // Update auth context with new organization
     setAuthContext({

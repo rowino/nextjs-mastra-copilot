@@ -1,4 +1,4 @@
-import { authenticateRequest } from "@/lib/api-auth";
+import { authenticateRequest, setActiveOrganization } from "@/lib/api-auth";
 import { getOrgScopedDb, generateId } from "@/mastra/tools/shared/org-scoped-db";
 import { organization, member, user } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
@@ -88,6 +88,9 @@ export async function POST(req: NextRequest) {
       role: "admin",
       createdAt: new Date(),
     });
+
+    // Set as active organization
+    await setActiveOrganization(orgId);
 
     return Response.json(
       {
