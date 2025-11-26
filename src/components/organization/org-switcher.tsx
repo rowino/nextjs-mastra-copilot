@@ -57,16 +57,16 @@ export function OrgSwitcher() {
         <DropdownMenuTrigger asChild>
           <Button
             variant="outline"
-            className="min-w-[200px] justify-between bg-white/5 border-white/10 hover:bg-white/10"
+            className="min-w-[200px] justify-between bg-white/5 border-white/10 hover:bg-white/10 text-white hover:text-white"
             disabled={isSwitching}
           >
             <div className="flex items-center gap-2 truncate">
-              <Building2 className="h-4 w-4 flex-shrink-0" />
+              <Building2 className="h-4 w-4 flex-shrink-0 text-white" />
               <span className="truncate">
                 {currentOrganization?.name || "Select Organization"}
               </span>
             </div>
-            <ChevronDown className="h-4 w-4 flex-shrink-0 opacity-50" />
+            <ChevronDown className="h-4 w-4 flex-shrink-0 opacity-50 text-white" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[200px]">
