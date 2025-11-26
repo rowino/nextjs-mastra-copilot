@@ -7,6 +7,7 @@ import { authClient } from "@/lib/auth-client";
 import { UserDropdown } from "@/components/user/user-dropdown";
 import { AuthProvider } from "@/hooks/use-auth-context";
 import { OrgSwitcher } from "@/components/organization/org-switcher";
+import { Building2 } from "lucide-react";
 
 export default function ProtectedLayout({
   children,
@@ -56,9 +57,10 @@ export default function ProtectedLayout({
                   </Link>
                   <Link
                     href="/settings/organization"
-                    className="text-sm text-white/70 hover:text-white transition-colors"
+                    className="flex items-center gap-2 text-sm text-white/70 hover:text-white transition-colors"
                   >
-                    Settings
+                    <Building2 className="h-4 w-4" />
+                    Organization
                   </Link>
                 </nav>
               </div>
