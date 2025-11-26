@@ -35,6 +35,17 @@ pnpm dev:cf
 
 Use this only when you need to test the exact production build before deploying.
 
+### Testing Agents in CLI Playground
+```bash
+# Start Mastra CLI playground with agent testing UI
+pnpm mastra:dev
+
+# Access Swagger UI at http://localhost:4111/swagger-ui
+# Access Mastra Studio at http://localhost:4111
+```
+
+**Note:** Uses in-memory storage - data resets on restart. For persistent testing with D1, use `pnpm dev`.
+
 ### Production Commands
 ```bash
 # Build for production

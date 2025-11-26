@@ -8,20 +8,6 @@
       "when": 1763924408559,
       "tag": "0000_smooth_black_crow",
       "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1763925174552,
-      "tag": "0001_volatile_fallen_one",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1764042753937,
-      "tag": "0002_flawless_nightshade",
-      "breakpoints": true
     }
   ]
 }

@@ -14,7 +14,8 @@
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "wrangler d1 migrations apply mastra-db"
+    "db:migrate": "wrangler d1 migrations apply mastra-db",
+    "mastra:dev": "mastra dev"
   },
   "dependencies": {
     "@ag-ui/mastra": "0.1.0",
@@ -28,6 +29,7 @@
     "@mastra/client-js": "0.14.1",
     "@mastra/cloudflare-d1": "^0.13.8",
     "@mastra/core": "0.19.1",
+    "@mastra/libsql": "^0.16.2",
     "@mastra/memory": "0.15.4",
     "@opennextjs/cloudflare": "^1.9.1",
     "@openrouter/ai-sdk-provider": "^1.2.5",

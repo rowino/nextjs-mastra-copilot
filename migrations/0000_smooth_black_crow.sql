@@ -34,6 +34,7 @@ CREATE TABLE `user` (
 	`email` text NOT NULL,
 	`emailVerified` integer NOT NULL,
 	`image` text,
+    `twoFactorEnabled` integer,
 	`createdAt` integer NOT NULL,
 	`updatedAt` integer NOT NULL
 );
@@ -47,3 +48,27 @@ CREATE TABLE `verification` (
 	`createdAt` integer NOT NULL,
 	`updatedAt` integer NOT NULL
 );
+--> statement-breakpoint
+CREATE TABLE `passkey` (
+	`id` text PRIMARY KEY NOT NULL,
+	`name` text,
+	`publicKey` text NOT NULL,
+	`userId` text NOT NULL,
+	`credentialID` text NOT NULL,
+	`counter` integer NOT NULL,
+	`deviceType` text NOT NULL,
+	`backedUp` integer NOT NULL,
+	`transports` text,
+	`aaguid` text;
+	`createdAt` integer,
+	FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
+CREATE TABLE `twoFactor` (
+	`id` text PRIMARY KEY NOT NULL,
+	`userId` text NOT NULL,
+	`secret` text,
+	`backupCodes` text,
+	FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
