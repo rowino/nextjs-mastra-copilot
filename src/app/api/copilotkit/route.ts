@@ -14,15 +14,14 @@ const serviceAdapter = new ExperimentalEmptyAdapter();
 // 2. Build a Next.js API route that handles the CopilotKit runtime requests.
 export const POST = async (req: NextRequest) => {
   // Get Cloudflare context to access D1 binding
-  let d1Database;
-  try {
-    const { env } = getCloudflareContext();
-    d1Database = env.D1Database;
-  } catch {
-    // Not in Cloudflare Workers environment
+  const { env } = getCloudflareContext();
+  const d1Database = env.D1Database;
+
+  if (!d1Database) {
+    throw new Error("D1Database binding not found. Ensure you're running in Cloudflare Workers context.");
   }
 
-  // Get Mastra instance with D1 if available
+  // Get Mastra instance with D1 storage
   const mastra = getMastraInstance(d1Database);
 
   // 3. Create the CopilotRuntime instance and utilize the Mastra AG-UI

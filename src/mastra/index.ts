@@ -1,23 +1,34 @@
 import { Mastra } from "@mastra/core/mastra";
 import { D1Store } from "@mastra/cloudflare-d1";
+import { LibSQLStore } from "@mastra/libsql";
 import { getWeatherAgent } from "./agents";
 import { ConsoleLogger, LogLevel } from "@mastra/core/logger";
 import type { D1Database } from "@cloudflare/workers-types";
 
 const LOG_LEVEL = process.env.LOG_LEVEL as LogLevel || "info";
 
-export function getMastraInstance(d1Database?: D1Database) {
-  if (!d1Database) {
-    throw new Error("D1Database is required. Use wrangler dev for local development or deploy to Cloudflare.");
-  }
+// CLI mode: In-memory storage for testing
+const cliStorage = new LibSQLStore({ url: ":memory:" });
 
-  const storage = new D1Store({ binding: d1Database });
+export const mastra = new Mastra({
+  agents: {
+    weatherAgent: getWeatherAgent(cliStorage)
+  },
+  storage: cliStorage,
+  logger: new ConsoleLogger({
+    level: LOG_LEVEL,
+  }),
+});
+
+// Production mode: D1 persistent storage
+export function getMastraInstance(d1Database: D1Database) {
+  const d1Storage = new D1Store({ binding: d1Database });
 
   return new Mastra({
     agents: {
-      weatherAgent: getWeatherAgent(storage)
+      weatherAgent: getWeatherAgent(d1Storage)
     },
-    storage,
+    storage: d1Storage,
     logger: new ConsoleLogger({
       level: LOG_LEVEL,
     }),
