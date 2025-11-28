@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth-client";
 import { UserAvatar } from "./user-avatar";
+import { useAuthContext } from "@/hooks/use-auth-context";
 
 interface UserDropdownProps {
   user: {
@@ -20,6 +21,8 @@ interface UserDropdownProps {
 }
 
 export function UserDropdown({ user }: UserDropdownProps) {
+  const { currentOrganization } = useAuthContext();
+
   const handleSignOut = async () => {
     try {
       await authClient.signOut();
@@ -49,13 +52,13 @@ export function UserDropdown({ user }: UserDropdownProps) {
         </div>
         <DropdownMenuSeparator className="bg-white/10" />
         <DropdownMenuItem asChild>
-          <Link href="/dashboard" className="cursor-pointer text-white">
-            Dashboard
+          <Link href="/settings" className="cursor-pointer text-white">
+            Settings
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="/settings" className="cursor-pointer text-white">
-            Settings
+          <Link href="/settings/organization" className="cursor-pointer text-white">
+            Organization
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator className="bg-white/10" />

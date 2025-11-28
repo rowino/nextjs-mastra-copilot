@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 import { UserDropdown } from "@/components/user/user-dropdown";
+import { AuthProvider } from "@/hooks/use-auth-context";
+import { OrgSwitcher } from "@/components/organization/org-switcher";
 
 export default function ProtectedLayout({
   children,
@@ -22,8 +24,8 @@ export default function ProtectedLayout({
 
   if (isPending) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-950">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white/60"></div>
+      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#00ff88]"></div>
       </div>
     );
   }
@@ -33,31 +35,36 @@ export default function ProtectedLayout({
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-950">
-      <header className="bg-black/20 backdrop-blur-sm border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-8">
-              <Link
-                href="/"
-                className="text-xl font-bold text-white hover:text-white/80 transition-colors"
-              >
-                Mastra
-              </Link>
-              <nav className="flex items-center gap-6">
+    <AuthProvider>
+      <div className="min-h-screen flex flex-col bg-[#0a0a0a] font-mono">
+        <header className="border-b border-[#2a2a2a]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-16">
+              <div className="flex items-center gap-8">
                 <Link
-                  href="/dashboard"
-                  className="text-sm text-white/70 hover:text-white transition-colors"
+                  href="/"
+                  className="text-xl font-bold text-[#00ff88] hover:text-[#00ff88]/80 transition-colors duration-150 ease-linear"
                 >
-                  Dashboard
+                  MASTRA
                 </Link>
-              </nav>
+                <nav className="flex items-center gap-6">
+                  <Link
+                    href="/dashboard"
+                    className="text-sm text-[#888888] hover:text-[#e5e5e5] transition-colors duration-150 ease-linear uppercase tracking-wider"
+                  >
+                    Dashboard
+                  </Link>
+                </nav>
+              </div>
+              <div className="flex items-center gap-4">
+                <OrgSwitcher />
+                <UserDropdown user={session.user} />
+              </div>
             </div>
-            <UserDropdown user={session.user} />
           </div>
-        </div>
-      </header>
-      <main className="flex-1">{children}</main>
-    </div>
+        </header>
+        <main className="flex-1">{children}</main>
+      </div>
+    </AuthProvider>
   );
 }

@@ -413,57 +413,59 @@ export default function SettingsPage() {
   if (sessionLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="size-8 animate-spin text-white/50" />
+        <Loader2 className="size-8 animate-spin text-[#00ff88]" />
       </div>
     );
   }
 
   return (
-    <div className="container max-w-4xl mx-auto py-8 px-4">
+    <div className="container max-w-5xl mx-auto py-8 px-4">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white">Settings</h1>
-        <p className="text-white/60 mt-2">
+        <h1 className="text-2xl font-bold text-[#00ff88] font-mono uppercase tracking-wider">Account Settings</h1>
+        <p className="text-[#888888] mt-2 font-mono text-sm">
           Manage your account settings and preferences
         </p>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="bg-white/5 rounded-lg p-1 mb-6">
+        <TabsList className="bg-transparent border-b border-[#2a2a2a] rounded-none p-0 mb-8 h-auto gap-0">
           <TabsTrigger
             value="profile"
-            className="text-white/60 data-[state=active]:text-white data-[state=active]:bg-white/10 rounded-md px-4 py-2"
+            className="bg-transparent data-[state=active]:bg-transparent text-[#888888] data-[state=active]:text-[#00ff88] border-b-2 border-transparent data-[state=active]:border-[#00ff88] rounded-none px-6 py-3 font-mono uppercase text-xs tracking-wider transition-all duration-150 ease-linear relative -mb-[1px]"
           >
             <User className="size-4 mr-2" />
             Profile
           </TabsTrigger>
           <TabsTrigger
             value="security"
-            className="text-white/60 data-[state=active]:text-white data-[state=active]:bg-white/10 rounded-md px-4 py-2"
+            className="bg-transparent data-[state=active]:bg-transparent text-[#888888] data-[state=active]:text-[#00ff88] border-b-2 border-transparent data-[state=active]:border-[#00ff88] rounded-none px-6 py-3 font-mono uppercase text-xs tracking-wider transition-all duration-150 ease-linear relative -mb-[1px]"
           >
             <Shield className="size-4 mr-2" />
             Security
           </TabsTrigger>
           <TabsTrigger
             value="accounts"
-            className="text-white/60 data-[state=active]:text-white data-[state=active]:bg-white/10 rounded-md px-4 py-2"
+            className="bg-transparent data-[state=active]:bg-transparent text-[#888888] data-[state=active]:text-[#00ff88] border-b-2 border-transparent data-[state=active]:border-[#00ff88] rounded-none px-6 py-3 font-mono uppercase text-xs tracking-wider transition-all duration-150 ease-linear relative -mb-[1px]"
           >
             <Link2 className="size-4 mr-2" />
             Accounts
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="profile" className="space-y-6">
-          <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6">
-            <div className="flex items-center gap-3 mb-6">
-              <User className="size-5 text-white" />
-              <h2 className="text-xl font-semibold text-white">
-                Profile Information
-              </h2>
-            </div>
+        <TabsContent value="profile" className="space-y-8">
+          {/* Profile Information Section */}
+          <div className="relative">
+            <div className="absolute inset-x-0 top-3 border-t border-[#2a2a2a]" />
+            <h2 className="relative inline-block bg-[#0a0a0a] pr-4 text-sm font-mono uppercase tracking-wider text-[#888888]">
+              <User className="inline-block size-4 mr-2 mb-1" />
+              Profile Information
+            </h2>
+          </div>
 
+          <div className="border border-[#2a2a2a] rounded-lg p-6">
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-white/80">
+                <Label htmlFor="email" className="text-[#888888] font-mono uppercase text-xs tracking-wider">
                   Email
                 </Label>
                 <Input
@@ -471,12 +473,12 @@ export default function SettingsPage() {
                   type="email"
                   value={session?.user?.email || ""}
                   disabled
-                  className="bg-white/5 border-white/10 text-white/60"
+                  className="bg-[#141414] border-[#2a2a2a] text-[#888888] font-mono"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="name" className="text-white/80">
+                <Label htmlFor="name" className="text-[#888888] font-mono uppercase text-xs tracking-wider">
                   Name
                 </Label>
                 <Input
@@ -485,36 +487,40 @@ export default function SettingsPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Your name"
-                  className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-white/30"
+                  className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] placeholder:text-[#888888] focus:border-[#00ff88] focus:ring-1 focus:ring-[#00ff88] font-mono transition-colors duration-150 ease-linear"
                 />
               </div>
 
-              <Button
-                onClick={handleUpdateProfile}
-                disabled={isLoading}
-                className="w-full sm:w-auto"
-              >
-                {isLoading ? (
-                  <Loader2 className="size-4 mr-2 animate-spin" />
-                ) : (
-                  <Check className="size-4 mr-2" />
-                )}
-                Save Changes
-              </Button>
+              <div className="flex justify-end pt-4 border-t border-[#2a2a2a]">
+                <Button
+                  onClick={handleUpdateProfile}
+                  disabled={isLoading}
+                  className="bg-[#00ff88] text-[#0a0a0a] hover:bg-[#00ff88]/90 font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
+                >
+                  {isLoading ? (
+                    <Loader2 className="size-4 mr-2 animate-spin" />
+                  ) : (
+                    <Check className="size-4 mr-2" />
+                  )}
+                  Save Changes
+                </Button>
+              </div>
             </div>
           </div>
 
-          <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6">
-            <div className="flex items-center gap-3 mb-6">
-              <Key className="size-5 text-white" />
-              <h2 className="text-xl font-semibold text-white">
-                Change Password
-              </h2>
-            </div>
+          {/* Change Password Section */}
+          <div className="relative">
+            <div className="absolute inset-x-0 top-3 border-t border-[#2a2a2a]" />
+            <h2 className="relative inline-block bg-[#0a0a0a] pr-4 text-sm font-mono uppercase tracking-wider text-[#888888]">
+              <Key className="inline-block size-4 mr-2 mb-1" />
+              Change Password
+            </h2>
+          </div>
 
+          <div className="border border-[#2a2a2a] rounded-lg p-6">
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="currentPassword" className="text-white/80">
+                <Label htmlFor="currentPassword" className="text-[#888888] font-mono uppercase text-xs tracking-wider">
                   Current Password
                 </Label>
                 <Input
@@ -523,12 +529,12 @@ export default function SettingsPage() {
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
                   placeholder="Enter current password"
-                  className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-white/30"
+                  className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] placeholder:text-[#888888] focus:border-[#00ff88] focus:ring-1 focus:ring-[#00ff88] font-mono transition-colors duration-150 ease-linear"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="newPassword" className="text-white/80">
+                <Label htmlFor="newPassword" className="text-[#888888] font-mono uppercase text-xs tracking-wider">
                   New Password
                 </Label>
                 <Input
@@ -537,12 +543,12 @@ export default function SettingsPage() {
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   placeholder="Enter new password"
-                  className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-white/30"
+                  className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] placeholder:text-[#888888] focus:border-[#00ff88] focus:ring-1 focus:ring-[#00ff88] font-mono transition-colors duration-150 ease-linear"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword" className="text-white/80">
+                <Label htmlFor="confirmPassword" className="text-[#888888] font-mono uppercase text-xs tracking-wider">
                   Confirm New Password
                 </Label>
                 <Input
@@ -551,220 +557,232 @@ export default function SettingsPage() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Confirm new password"
-                  className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-white/30"
+                  className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] placeholder:text-[#888888] focus:border-[#00ff88] focus:ring-1 focus:ring-[#00ff88] font-mono transition-colors duration-150 ease-linear"
                 />
               </div>
 
-              <Button
-                onClick={handleChangePassword}
-                disabled={isLoading}
-                className="w-full sm:w-auto"
-              >
-                {isLoading ? (
-                  <Loader2 className="size-4 mr-2 animate-spin" />
-                ) : (
-                  <Key className="size-4 mr-2" />
-                )}
-                Change Password
-              </Button>
+              <div className="flex justify-end pt-4 border-t border-[#2a2a2a]">
+                <Button
+                  onClick={handleChangePassword}
+                  disabled={isLoading}
+                  className="bg-[#00ff88] text-[#0a0a0a] hover:bg-[#00ff88]/90 font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
+                >
+                  {isLoading ? (
+                    <Loader2 className="size-4 mr-2 animate-spin" />
+                  ) : (
+                    <Key className="size-4 mr-2" />
+                  )}
+                  Change Password
+                </Button>
+              </div>
             </div>
           </div>
         </TabsContent>
 
-        <TabsContent value="security" className="space-y-6">
+        <TabsContent value="security" className="space-y-8">
           {authConfig.twoFactor && (
-            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-6">
-                <Smartphone className="size-5 text-white" />
-                <h2 className="text-xl font-semibold text-white">
+            <>
+              <div className="relative">
+                <div className="absolute inset-x-0 top-3 border-t border-[#2a2a2a]" />
+                <h2 className="relative inline-block bg-[#0a0a0a] pr-4 text-sm font-mono uppercase tracking-wider text-[#888888]">
+                  <Smartphone className="inline-block size-4 mr-2 mb-1" />
                   Two-Factor Authentication
                 </h2>
               </div>
 
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <p className="text-white/80">Status</p>
-                  <p
-                    className={`text-sm ${twoFactorEnabled ? "text-green-400" : "text-white/50"}`}
+              <div className="border border-[#2a2a2a] rounded-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <p className="text-[#888888] font-mono uppercase text-xs">Status</p>
+                    <p
+                      className={`text-sm font-mono ${twoFactorEnabled ? "text-[#00ff88]" : "text-[#888888]"}`}
+                    >
+                      {twoFactorEnabled ? "Enabled" : "Disabled"}
+                    </p>
+                  </div>
+                  <div
+                    className={`px-3 py-1 rounded text-xs font-mono uppercase tracking-wider ${twoFactorEnabled ? "bg-[#00ff88]/20 text-[#00ff88]" : "bg-[#2a2a2a] text-[#888888]"}`}
                   >
-                    {twoFactorEnabled ? "Enabled" : "Disabled"}
-                  </p>
+                    {twoFactorEnabled ? "Active" : "Inactive"}
+                  </div>
                 </div>
-                <div
-                  className={`px-3 py-1 rounded-full text-sm ${twoFactorEnabled ? "bg-green-500/20 text-green-400" : "bg-white/10 text-white/50"}`}
-                >
-                  {twoFactorEnabled ? "Active" : "Inactive"}
-                </div>
-              </div>
 
-              {!twoFactorEnabled ? (
-                <div className="space-y-4">
-                  <p className="text-sm text-white/60">
-                    Add an extra layer of security to your account by enabling
-                    two-factor authentication.
-                  </p>
-                  <div className="space-y-2">
-                    <Label htmlFor="2faPassword" className="text-white/80">
-                      Enter your password to enable 2FA
-                    </Label>
-                    <Input
-                      id="2faPassword"
-                      type="password"
-                      value={currentPassword}
-                      onChange={(e) => setCurrentPassword(e.target.value)}
-                      placeholder="Your password"
-                      className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-white/30"
-                    />
-                  </div>
-                  <Button
-                    onClick={handleEnableTwoFactor}
-                    disabled={isLoading || !currentPassword}
-                    className="w-full sm:w-auto"
-                  >
-                    {isLoading ? (
-                      <Loader2 className="size-4 mr-2 animate-spin" />
-                    ) : (
-                      <Shield className="size-4 mr-2" />
-                    )}
-                    Enable 2FA
-                  </Button>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="viewCodesPassword" className="text-white/80">
-                      Enter password to manage 2FA
-                    </Label>
-                    <Input
-                      id="viewCodesPassword"
-                      type="password"
-                      value={currentPassword}
-                      onChange={(e) => setCurrentPassword(e.target.value)}
-                      placeholder="Your password"
-                      className="bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-white/30"
-                    />
-                  </div>
-                  <div className="flex flex-wrap gap-3">
+                {!twoFactorEnabled ? (
+                  <div className="space-y-4">
+                    <p className="text-sm text-[#888888] font-mono">
+                      Add an extra layer of security to your account by enabling
+                      two-factor authentication.
+                    </p>
+                    <div className="space-y-2">
+                      <Label htmlFor="2faPassword" className="text-[#888888] font-mono uppercase text-xs tracking-wider">
+                        Enter your password to enable 2FA
+                      </Label>
+                      <Input
+                        id="2faPassword"
+                        type="password"
+                        value={currentPassword}
+                        onChange={(e) => setCurrentPassword(e.target.value)}
+                        placeholder="Your password"
+                        className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] placeholder:text-[#888888] focus:border-[#00ff88] focus:ring-1 focus:ring-[#00ff88] font-mono transition-colors duration-150 ease-linear"
+                      />
+                    </div>
                     <Button
-                      variant="outline"
-                      onClick={handleRegenerateBackupCodes}
+                      onClick={handleEnableTwoFactor}
                       disabled={isLoading || !currentPassword}
-                      className="bg-white/5 hover:bg-white/10 border-white/10 text-white"
+                      className="bg-[#00ff88] text-[#0a0a0a] hover:bg-[#00ff88]/90 font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
                     >
-                      View/Regenerate Backup Codes
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      onClick={() => setShowDisableTwoFactorDialog(true)}
-                      disabled={isLoading}
-                    >
-                      <X className="size-4 mr-2" />
-                      Disable 2FA
+                      {isLoading ? (
+                        <Loader2 className="size-4 mr-2 animate-spin" />
+                      ) : (
+                        <Shield className="size-4 mr-2" />
+                      )}
+                      Enable 2FA
                     </Button>
                   </div>
-                </div>
-              )}
-            </div>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="viewCodesPassword" className="text-[#888888] font-mono uppercase text-xs tracking-wider">
+                        Enter password to manage 2FA
+                      </Label>
+                      <Input
+                        id="viewCodesPassword"
+                        type="password"
+                        value={currentPassword}
+                        onChange={(e) => setCurrentPassword(e.target.value)}
+                        placeholder="Your password"
+                        className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] placeholder:text-[#888888] focus:border-[#00ff88] focus:ring-1 focus:ring-[#00ff88] font-mono transition-colors duration-150 ease-linear"
+                      />
+                    </div>
+                    <div className="flex flex-wrap gap-3">
+                      <Button
+                        variant="outline"
+                        onClick={handleRegenerateBackupCodes}
+                        disabled={isLoading || !currentPassword}
+                        className="bg-transparent hover:bg-[#2a2a2a] border-[#2a2a2a] text-[#e5e5e5] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
+                      >
+                        View/Regenerate Backup Codes
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        onClick={() => setShowDisableTwoFactorDialog(true)}
+                        disabled={isLoading}
+                        className="bg-[#ff4444] hover:bg-[#ff4444]/90 text-[#0a0a0a] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
+                      >
+                        <X className="size-4 mr-2" />
+                        Disable 2FA
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </>
           )}
 
           {authConfig.passkey && (
-            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
-                  <Key className="size-5 text-white" />
-                  <h2 className="text-xl font-semibold text-white">Passkeys</h2>
+            <>
+              <div className="relative">
+                <div className="absolute inset-x-0 top-3 border-t border-[#2a2a2a]" />
+                <div className="relative flex items-center justify-between">
+                  <h2 className="inline-block bg-[#0a0a0a] pr-4 text-sm font-mono uppercase tracking-wider text-[#888888]">
+                    <Key className="inline-block size-4 mr-2 mb-1" />
+                    Passkeys
+                  </h2>
+                  <Button
+                    size="sm"
+                    onClick={() => setShowAddPasskeyDialog(true)}
+                    className="bg-[#00ff88] text-[#0a0a0a] hover:bg-[#00ff88]/90 font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
+                  >
+                    <Plus className="size-4 mr-2" />
+                    Add Passkey
+                  </Button>
                 </div>
-                <Button
-                  size="sm"
-                  onClick={() => setShowAddPasskeyDialog(true)}
-                  className="bg-white/10 hover:bg-white/20 text-white"
-                >
-                  <Plus className="size-4 mr-2" />
-                  Add Passkey
-                </Button>
               </div>
 
-              {passkeys.length === 0 ? (
-                <p className="text-white/60 text-sm">
-                  No passkeys registered. Add a passkey for passwordless sign-in.
-                </p>
-              ) : (
-                <div className="space-y-3">
-                  {passkeys.map((passkey) => (
-                    <div
-                      key={passkey.id}
-                      className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10"
-                    >
-                      <div>
-                        <p className="text-white font-medium">
-                          {passkey.name || "Unnamed passkey"}
-                        </p>
-                        <p className="text-sm text-white/50">
-                          Added {formatDate(passkey.createdAt)}
-                        </p>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => setPasskeyToDelete(passkey)}
-                        className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+              <div className="border border-[#2a2a2a] rounded-lg p-6">
+                {passkeys.length === 0 ? (
+                  <p className="text-[#888888] text-sm font-mono">
+                    No passkeys registered. Add a passkey for passwordless sign-in.
+                  </p>
+                ) : (
+                  <div className="space-y-3">
+                    {passkeys.map((passkey) => (
+                      <div
+                        key={passkey.id}
+                        className="flex items-center justify-between p-3 bg-[#141414] rounded border border-[#2a2a2a]"
                       >
-                        <Trash2 className="size-4" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+                        <div>
+                          <p className="text-[#e5e5e5] font-medium font-mono">
+                            {passkey.name || "Unnamed passkey"}
+                          </p>
+                          <p className="text-sm text-[#888888] font-mono">
+                            Added {formatDate(passkey.createdAt)}
+                          </p>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => setPasskeyToDelete(passkey)}
+                          className="text-[#ff4444] hover:text-[#ff4444] hover:bg-[#ff4444]/10 transition-colors duration-150 ease-linear"
+                        >
+                          <Trash2 className="size-4" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </>
           )}
 
-          <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-3">
-                <Monitor className="size-5 text-white" />
-                <h2 className="text-xl font-semibold text-white">
-                  Active Sessions
-                </h2>
-              </div>
+          <div className="relative">
+            <div className="absolute inset-x-0 top-3 border-t border-[#2a2a2a]" />
+            <div className="relative flex items-center justify-between">
+              <h2 className="inline-block bg-[#0a0a0a] pr-4 text-sm font-mono uppercase tracking-wider text-[#888888]">
+                <Monitor className="inline-block size-4 mr-2 mb-1" />
+                Active Sessions
+              </h2>
               {sessions.length > 1 && (
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={handleRevokeAllSessions}
                   disabled={isLoading}
-                  className="bg-white/5 hover:bg-white/10 border-white/10 text-white"
+                  className="bg-transparent hover:bg-[#2a2a2a] border-[#2a2a2a] text-[#e5e5e5] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
                 >
                   <LogOut className="size-4 mr-2" />
                   Revoke Others
                 </Button>
               )}
             </div>
+          </div>
 
+          <div className="border border-[#2a2a2a] rounded-lg p-6">
             {sessions.length === 0 ? (
               <div className="flex items-center justify-center py-4">
-                <Loader2 className="size-5 animate-spin text-white/50" />
+                <Loader2 className="size-5 animate-spin text-[#00ff88]" />
               </div>
             ) : (
               <div className="space-y-3">
                 {sessions.map((sess) => (
                   <div
                     key={sess.id}
-                    className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10"
+                    className="flex items-center justify-between p-3 bg-[#141414] rounded border border-[#2a2a2a]"
                   >
                     <div className="flex items-center gap-3">
-                      <Monitor className="size-5 text-white/50" />
+                      <Monitor className="size-5 text-[#888888]" />
                       <div>
                         <div className="flex items-center gap-2">
-                          <p className="text-white font-medium">
+                          <p className="text-[#e5e5e5] font-medium font-mono">
                             {parseUserAgent(sess.userAgent)}
                           </p>
                           {sess.token === currentSessionToken && (
-                            <span className="px-2 py-0.5 text-xs bg-green-500/20 text-green-400 rounded">
+                            <span className="px-2 py-0.5 text-xs bg-[#00ff88]/20 text-[#00ff88] rounded font-mono uppercase tracking-wider">
                               Current
                             </span>
                           )}
                         </div>
-                        <p className="text-sm text-white/50">
+                        <p className="text-sm text-[#888888] font-mono">
                           {sess.ipAddress || "Unknown IP"} ·{" "}
                           {formatDate(sess.createdAt)}
                         </p>
@@ -776,7 +794,7 @@ export default function SettingsPage() {
                         size="icon"
                         onClick={() => handleRevokeSession(sess.token)}
                         disabled={isLoading}
-                        className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                        className="text-[#ff4444] hover:text-[#ff4444] hover:bg-[#ff4444]/10 transition-colors duration-150 ease-linear"
                       >
                         <X className="size-4" />
                       </Button>
@@ -788,22 +806,23 @@ export default function SettingsPage() {
           </div>
         </TabsContent>
 
-        <TabsContent value="accounts" className="space-y-6">
-          <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6">
-            <div className="flex items-center gap-3 mb-6">
-              <Link2 className="size-5 text-white" />
-              <h2 className="text-xl font-semibold text-white">
-                Connected Accounts
-              </h2>
-            </div>
+        <TabsContent value="accounts" className="space-y-8">
+          <div className="relative">
+            <div className="absolute inset-x-0 top-3 border-t border-[#2a2a2a]" />
+            <h2 className="relative inline-block bg-[#0a0a0a] pr-4 text-sm font-mono uppercase tracking-wider text-[#888888]">
+              <Link2 className="inline-block size-4 mr-2 mb-1" />
+              Connected Accounts
+            </h2>
+          </div>
 
+          <div className="border border-[#2a2a2a] rounded-lg p-6">
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-white/10">
+              <div className="flex items-center justify-between p-4 bg-[#141414] rounded border border-[#2a2a2a]">
                 <div className="flex items-center gap-3">
-                  <Github className="size-6 text-white" />
+                  <Github className="size-6 text-[#e5e5e5]" />
                   <div>
-                    <p className="text-white font-medium">GitHub</p>
-                    <p className="text-sm text-white/50">
+                    <p className="text-[#e5e5e5] font-medium font-mono">GitHub</p>
+                    <p className="text-sm text-[#888888] font-mono">
                       {connectedAccounts.github
                         ? "Connected"
                         : "Not connected"}
@@ -816,7 +835,7 @@ export default function SettingsPage() {
                     size="sm"
                     onClick={() => handleUnlinkAccount("github")}
                     disabled={isLoading}
-                    className="bg-white/5 hover:bg-white/10 border-white/10 text-white"
+                    className="bg-transparent hover:bg-[#2a2a2a] border-[#2a2a2a] text-[#e5e5e5] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
                   >
                     Disconnect
                   </Button>
@@ -824,19 +843,19 @@ export default function SettingsPage() {
                   <Button
                     size="sm"
                     onClick={() => handleLinkSocial("github")}
-                    className="bg-white/10 hover:bg-white/20 text-white"
+                    className="bg-[#00ff88] text-[#0a0a0a] hover:bg-[#00ff88]/90 font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
                   >
                     Connect
                   </Button>
                 )}
               </div>
 
-              <div className="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-white/10">
+              <div className="flex items-center justify-between p-4 bg-[#141414] rounded border border-[#2a2a2a]">
                 <div className="flex items-center gap-3">
-                  <Mail className="size-6 text-white" />
+                  <Mail className="size-6 text-[#e5e5e5]" />
                   <div>
-                    <p className="text-white font-medium">Google</p>
-                    <p className="text-sm text-white/50">
+                    <p className="text-[#e5e5e5] font-medium font-mono">Google</p>
+                    <p className="text-sm text-[#888888] font-mono">
                       {connectedAccounts.google
                         ? "Connected"
                         : "Not connected"}
@@ -849,7 +868,7 @@ export default function SettingsPage() {
                     size="sm"
                     onClick={() => handleUnlinkAccount("google")}
                     disabled={isLoading}
-                    className="bg-white/5 hover:bg-white/10 border-white/10 text-white"
+                    className="bg-transparent hover:bg-[#2a2a2a] border-[#2a2a2a] text-[#e5e5e5] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
                   >
                     Disconnect
                   </Button>
@@ -857,7 +876,7 @@ export default function SettingsPage() {
                   <Button
                     size="sm"
                     onClick={() => handleLinkSocial("google")}
-                    className="bg-white/10 hover:bg-white/20 text-white"
+                    className="bg-[#00ff88] text-[#0a0a0a] hover:bg-[#00ff88]/90 font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
                   >
                     Connect
                   </Button>
@@ -869,10 +888,10 @@ export default function SettingsPage() {
       </Tabs>
 
       <Dialog open={showTwoFactorDialog} onOpenChange={setShowTwoFactorDialog}>
-        <DialogContent className="bg-gray-900 border-white/20 text-white max-w-md">
+        <DialogContent className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] font-mono max-w-md">
           <DialogHeader>
-            <DialogTitle>Set Up Two-Factor Authentication</DialogTitle>
-            <DialogDescription className="text-white/60">
+            <DialogTitle className="text-[#e5e5e5] font-mono uppercase tracking-wider">Set Up Two-Factor Authentication</DialogTitle>
+            <DialogDescription className="text-[#888888] font-mono">
               Scan the QR code with your authenticator app
             </DialogDescription>
           </DialogHeader>
@@ -894,17 +913,17 @@ export default function SettingsPage() {
         open={showDisableTwoFactorDialog}
         onOpenChange={setShowDisableTwoFactorDialog}
       >
-        <DialogContent className="bg-gray-900 border-white/20 text-white">
+        <DialogContent className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] font-mono">
           <DialogHeader>
-            <DialogTitle>Disable Two-Factor Authentication</DialogTitle>
-            <DialogDescription className="text-white/60">
+            <DialogTitle className="text-[#e5e5e5] font-mono uppercase tracking-wider">Disable Two-Factor Authentication</DialogTitle>
+            <DialogDescription className="text-[#888888] font-mono">
               Enter your password to disable 2FA. This will make your account
               less secure.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="disablePassword" className="text-white/80">
+              <Label htmlFor="disablePassword" className="text-[#888888] font-mono uppercase text-xs tracking-wider">
                 Password
               </Label>
               <Input
@@ -913,7 +932,7 @@ export default function SettingsPage() {
                 value={disableTwoFactorPassword}
                 onChange={(e) => setDisableTwoFactorPassword(e.target.value)}
                 placeholder="Enter your password"
-                className="bg-white/5 border-white/10 text-white placeholder:text-white/40"
+                className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] placeholder:text-[#888888] focus:border-[#00ff88] focus:ring-1 focus:ring-[#00ff88] font-mono transition-colors duration-150 ease-linear"
               />
             </div>
           </div>
@@ -921,7 +940,7 @@ export default function SettingsPage() {
             <Button
               variant="outline"
               onClick={() => setShowDisableTwoFactorDialog(false)}
-              className="bg-white/5 hover:bg-white/10 border-white/10 text-white"
+              className="bg-transparent hover:bg-[#2a2a2a] border-[#2a2a2a] text-[#e5e5e5] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
             >
               Cancel
             </Button>
@@ -929,6 +948,7 @@ export default function SettingsPage() {
               variant="destructive"
               onClick={handleDisableTwoFactor}
               disabled={isLoading || !disableTwoFactorPassword}
+              className="bg-[#ff4444] hover:bg-[#ff4444]/90 text-[#0a0a0a] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
             >
               {isLoading ? (
                 <Loader2 className="size-4 mr-2 animate-spin" />
@@ -940,10 +960,10 @@ export default function SettingsPage() {
       </Dialog>
 
       <Dialog open={showBackupCodesDialog} onOpenChange={setShowBackupCodesDialog}>
-        <DialogContent className="bg-gray-900 border-white/20 text-white">
+        <DialogContent className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] font-mono">
           <DialogHeader>
-            <DialogTitle>Backup Codes</DialogTitle>
-            <DialogDescription className="text-white/60">
+            <DialogTitle className="text-[#e5e5e5] font-mono uppercase tracking-wider">Backup Codes</DialogTitle>
+            <DialogDescription className="text-[#888888] font-mono">
               Save these codes in a secure location. Each code can only be used
               once.
             </DialogDescription>
@@ -953,16 +973,16 @@ export default function SettingsPage() {
               {backupCodes.map((code, index) => (
                 <div
                   key={index}
-                  className="bg-white/5 border border-white/10 rounded px-3 py-2"
+                  className="bg-[#0a0a0a] border border-[#2a2a2a] rounded px-3 py-2"
                 >
-                  <code className="text-sm font-mono text-white">{code}</code>
+                  <code className="text-sm font-mono text-[#00ff88]">{code}</code>
                 </div>
               ))}
             </div>
             <Button
               variant="outline"
               onClick={handleCopyBackupCodes}
-              className="w-full bg-white/5 hover:bg-white/10 border-white/10 text-white"
+              className="w-full bg-transparent hover:bg-[#2a2a2a] border-[#2a2a2a] text-[#e5e5e5] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
             >
               {backupCodesCopied ? (
                 <>
@@ -981,16 +1001,16 @@ export default function SettingsPage() {
       </Dialog>
 
       <Dialog open={showAddPasskeyDialog} onOpenChange={setShowAddPasskeyDialog}>
-        <DialogContent className="bg-gray-900 border-white/20 text-white">
+        <DialogContent className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] font-mono">
           <DialogHeader>
-            <DialogTitle>Add Passkey</DialogTitle>
-            <DialogDescription className="text-white/60">
+            <DialogTitle className="text-[#e5e5e5] font-mono uppercase tracking-wider">Add Passkey</DialogTitle>
+            <DialogDescription className="text-[#888888] font-mono">
               Give your passkey a name to identify it later
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="passkeyName" className="text-white/80">
+              <Label htmlFor="passkeyName" className="text-[#888888] font-mono uppercase text-xs tracking-wider">
                 Passkey Name
               </Label>
               <Input
@@ -999,7 +1019,7 @@ export default function SettingsPage() {
                 value={passkeyName}
                 onChange={(e) => setPasskeyName(e.target.value)}
                 placeholder="e.g., MacBook Pro"
-                className="bg-white/5 border-white/10 text-white placeholder:text-white/40"
+                className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] placeholder:text-[#888888] focus:border-[#00ff88] focus:ring-1 focus:ring-[#00ff88] font-mono transition-colors duration-150 ease-linear"
               />
             </div>
           </div>
@@ -1010,13 +1030,14 @@ export default function SettingsPage() {
                 setShowAddPasskeyDialog(false);
                 setPasskeyName("");
               }}
-              className="bg-white/5 hover:bg-white/10 border-white/10 text-white"
+              className="bg-transparent hover:bg-[#2a2a2a] border-[#2a2a2a] text-[#e5e5e5] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
             >
               Cancel
             </Button>
             <Button
               onClick={handleAddPasskey}
               disabled={isLoading || !passkeyName.trim()}
+              className="bg-[#00ff88] text-[#0a0a0a] hover:bg-[#00ff88]/90 font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
             >
               {isLoading ? (
                 <Loader2 className="size-4 mr-2 animate-spin" />
@@ -1033,10 +1054,10 @@ export default function SettingsPage() {
         open={!!passkeyToDelete}
         onOpenChange={(open) => !open && setPasskeyToDelete(null)}
       >
-        <DialogContent className="bg-gray-900 border-white/20 text-white">
+        <DialogContent className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] font-mono">
           <DialogHeader>
-            <DialogTitle>Delete Passkey</DialogTitle>
-            <DialogDescription className="text-white/60">
+            <DialogTitle className="text-[#e5e5e5] font-mono uppercase tracking-wider">Delete Passkey</DialogTitle>
+            <DialogDescription className="text-[#888888] font-mono">
               Are you sure you want to delete &quot;{passkeyToDelete?.name || "this passkey"}&quot;? This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
@@ -1044,7 +1065,7 @@ export default function SettingsPage() {
             <Button
               variant="outline"
               onClick={() => setPasskeyToDelete(null)}
-              className="bg-white/5 hover:bg-white/10 border-white/10 text-white"
+              className="bg-transparent hover:bg-[#2a2a2a] border-[#2a2a2a] text-[#e5e5e5] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
             >
               Cancel
             </Button>
@@ -1052,6 +1073,7 @@ export default function SettingsPage() {
               variant="destructive"
               onClick={handleDeletePasskey}
               disabled={isLoading}
+              className="bg-[#ff4444] hover:bg-[#ff4444]/90 text-[#0a0a0a] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
             >
               {isLoading ? (
                 <Loader2 className="size-4 mr-2 animate-spin" />

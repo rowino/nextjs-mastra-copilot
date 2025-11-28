@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { emailOTP, magicLink, twoFactor } from "better-auth/plugins";
+import { emailOTP, magicLink, twoFactor, organization } from "better-auth/plugins";
 import { passkey } from "@better-auth/passkey";
 import { getDb } from "@/db";
 import type { D1Database } from "@cloudflare/workers-types";
@@ -76,6 +76,12 @@ export const getAuth = (d1: D1Database) => {
       })
     );
   }
+
+  plugins.push(
+    organization({
+      allowUserToCreateOrganization: true,
+    })
+  );
 
   return betterAuth({
     appName: "Mastra Starter",

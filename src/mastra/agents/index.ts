@@ -17,7 +17,7 @@ export function getWeatherAgent(storage: MastraStorage) {
     return new Agent({
         name: "Weather Agent",
         tools: { weatherTool },
-        model: openrouter("gpt-4o"),
+        model: openrouter("gpt-5.1"),
         instructions: "You are a helpful assistant.",
         memory: new Memory({
             storage,
