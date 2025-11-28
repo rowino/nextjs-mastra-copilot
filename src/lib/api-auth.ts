@@ -2,10 +2,9 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { getAuth } from "@/lib/auth";
 import { setAuthContext } from "@/lib/auth-context";
 import { getDb } from "@/db";
-import { member, organization } from "@/db/schema";
+import { member } from "@/db/schema";
 import { eq, desc, and } from "drizzle-orm";
 import { headers, cookies } from "next/headers";
-import { generateId } from "@/mastra/tools/shared/org-scoped-db";
 
 type AuthResult = {
   userId: string;
