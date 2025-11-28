@@ -3,7 +3,7 @@ import { AsyncLocalStorage } from "async_hooks";
 export type AuthContext = {
   userId: string;
   email: string;
-  orgId: string;
+  orgId: string | null;
   roles: ("admin" | "user")[];
 };
 

@@ -59,7 +59,7 @@ CREATE TABLE `passkey` (
 	`deviceType` text NOT NULL,
 	`backedUp` integer NOT NULL,
 	`transports` text,
-	`aaguid` text;
+	`aaguid` text,
 	`createdAt` integer,
 	FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );

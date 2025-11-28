@@ -86,6 +86,23 @@ export const member = sqliteTable("member", {
 	createdAt: integer("createdAt", { mode: "timestamp" }).notNull(),
 });
 
+export const invitation = sqliteTable("invitation", {
+	id: text("id").primaryKey(),
+	organizationId: text("organizationId").notNull().references(() => organization.id, { onDelete: "cascade" }),
+	email: text("email").notNull(),
+	role: text("role", { enum: ["admin", "user"] }).notNull(),
+	invitedBy: text("invitedBy").notNull().references(() => user.id),
+	token: text("token").notNull().unique(),
+	status: text("status", { enum: ["pending", "accepted", "expired"] }).notNull().default("pending"),
+	expiresAt: integer("expiresAt", { mode: "timestamp" }).notNull(),
+	createdAt: integer("createdAt", { mode: "timestamp" }).notNull(),
+	acceptedAt: integer("acceptedAt", { mode: "timestamp" }),
+}, (table) => [
+	index("invitation_org_id_idx").on(table.organizationId),
+	index("invitation_email_idx").on(table.email),
+	index("invitation_token_idx").on(table.token),
+]);
+
 export const dataset = sqliteTable("dataset", {
 	id: text("id").primaryKey(),
 	orgId: text("orgId").notNull(),

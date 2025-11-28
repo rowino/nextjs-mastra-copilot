@@ -413,7 +413,7 @@ export default function SettingsPage() {
   if (sessionLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="size-8 animate-spin text-[#00ff88]" />
+        <Loader2 className="size-8 animate-spin text-theme-foreground" />
       </div>
     );
   }
@@ -421,31 +421,31 @@ export default function SettingsPage() {
   return (
     <div className="container max-w-5xl mx-auto py-8 px-4">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#00ff88] font-mono uppercase tracking-wider">Account Settings</h1>
-        <p className="text-[#888888] mt-2 font-mono text-sm">
+        <h1 className="text-2xl font-bold text-theme-foreground font-mono uppercase tracking-wider">Account Settings</h1>
+        <p className="text-theme-secondary mt-2 font-mono text-sm">
           Manage your account settings and preferences
         </p>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="bg-transparent border-b border-[#2a2a2a] rounded-none p-0 mb-8 h-auto gap-0">
+        <TabsList className="bg-transparent border-b border-theme-border-base rounded-none p-0 mb-8 h-auto gap-0">
           <TabsTrigger
             value="profile"
-            className="bg-transparent data-[state=active]:bg-transparent text-[#888888] data-[state=active]:text-[#00ff88] border-b-2 border-transparent data-[state=active]:border-[#00ff88] rounded-none px-6 py-3 font-mono uppercase text-xs tracking-wider transition-all duration-150 ease-linear relative -mb-[1px]"
+            className="bg-transparent data-[state=active]:bg-transparent text-theme-secondary data-[state=active]:text-theme-foreground border-b-2 border-transparent data-[state=active]:border-theme-primary rounded-none px-6 py-3 font-mono uppercase text-xs tracking-wider transition-all duration-150 ease-linear relative -mb-[1px]"
           >
             <User className="size-4 mr-2" />
             Profile
           </TabsTrigger>
           <TabsTrigger
             value="security"
-            className="bg-transparent data-[state=active]:bg-transparent text-[#888888] data-[state=active]:text-[#00ff88] border-b-2 border-transparent data-[state=active]:border-[#00ff88] rounded-none px-6 py-3 font-mono uppercase text-xs tracking-wider transition-all duration-150 ease-linear relative -mb-[1px]"
+            className="bg-transparent data-[state=active]:bg-transparent text-theme-secondary data-[state=active]:text-theme-foreground border-b-2 border-transparent data-[state=active]:border-theme-primary rounded-none px-6 py-3 font-mono uppercase text-xs tracking-wider transition-all duration-150 ease-linear relative -mb-[1px]"
           >
             <Shield className="size-4 mr-2" />
             Security
           </TabsTrigger>
           <TabsTrigger
             value="accounts"
-            className="bg-transparent data-[state=active]:bg-transparent text-[#888888] data-[state=active]:text-[#00ff88] border-b-2 border-transparent data-[state=active]:border-[#00ff88] rounded-none px-6 py-3 font-mono uppercase text-xs tracking-wider transition-all duration-150 ease-linear relative -mb-[1px]"
+            className="bg-transparent data-[state=active]:bg-transparent text-theme-secondary data-[state=active]:text-theme-foreground border-b-2 border-transparent data-[state=active]:border-theme-primary rounded-none px-6 py-3 font-mono uppercase text-xs tracking-wider transition-all duration-150 ease-linear relative -mb-[1px]"
           >
             <Link2 className="size-4 mr-2" />
             Accounts
@@ -455,17 +455,17 @@ export default function SettingsPage() {
         <TabsContent value="profile" className="space-y-8">
           {/* Profile Information Section */}
           <div className="relative">
-            <div className="absolute inset-x-0 top-3 border-t border-[#2a2a2a]" />
-            <h2 className="relative inline-block bg-[#0a0a0a] pr-4 text-sm font-mono uppercase tracking-wider text-[#888888]">
+            <div className="absolute inset-x-0 top-3 border-t border-theme-border-base" />
+            <h2 className="relative inline-block bg-theme-bg-base pr-4 text-sm font-mono uppercase tracking-wider text-theme-secondary">
               <User className="inline-block size-4 mr-2 mb-1" />
               Profile Information
             </h2>
           </div>
 
-          <div className="border border-[#2a2a2a] rounded-lg p-6">
+          <div className="border border-theme-border-base rounded-lg p-6">
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-[#888888] font-mono uppercase text-xs tracking-wider">
+                <Label htmlFor="email" className="text-theme-secondary font-mono uppercase text-xs tracking-wider">
                   Email
                 </Label>
                 <Input
@@ -473,12 +473,12 @@ export default function SettingsPage() {
                   type="email"
                   value={session?.user?.email || ""}
                   disabled
-                  className="bg-[#141414] border-[#2a2a2a] text-[#888888] font-mono"
+                  className="bg-theme-bg-elevated border-theme-border-base text-theme-secondary font-mono"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="name" className="text-[#888888] font-mono uppercase text-xs tracking-wider">
+                <Label htmlFor="name" className="text-theme-secondary font-mono uppercase text-xs tracking-wider">
                   Name
                 </Label>
                 <Input
@@ -487,15 +487,15 @@ export default function SettingsPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Your name"
-                  className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] placeholder:text-[#888888] focus:border-[#00ff88] focus:ring-1 focus:ring-[#00ff88] font-mono transition-colors duration-150 ease-linear"
+                  className="bg-theme-bg-elevated border-theme-border-base text-theme-foreground placeholder:text-theme-muted focus:border-theme-primary focus:ring-1 focus:ring-theme-primary font-mono transition-colors duration-150 ease-linear"
                 />
               </div>
 
-              <div className="flex justify-end pt-4 border-t border-[#2a2a2a]">
+              <div className="flex justify-end pt-4 border-t border-theme-border-base">
                 <Button
                   onClick={handleUpdateProfile}
                   disabled={isLoading}
-                  className="bg-[#00ff88] text-[#0a0a0a] hover:bg-[#00ff88]/90 font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
+                  className="bg-theme-primary text-theme-inverted hover:bg-theme-primary/90 font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
                 >
                   {isLoading ? (
                     <Loader2 className="size-4 mr-2 animate-spin" />
@@ -510,17 +510,17 @@ export default function SettingsPage() {
 
           {/* Change Password Section */}
           <div className="relative">
-            <div className="absolute inset-x-0 top-3 border-t border-[#2a2a2a]" />
-            <h2 className="relative inline-block bg-[#0a0a0a] pr-4 text-sm font-mono uppercase tracking-wider text-[#888888]">
+            <div className="absolute inset-x-0 top-3 border-t border-theme-border-base" />
+            <h2 className="relative inline-block bg-theme-bg-base pr-4 text-sm font-mono uppercase tracking-wider text-theme-secondary">
               <Key className="inline-block size-4 mr-2 mb-1" />
               Change Password
             </h2>
           </div>
 
-          <div className="border border-[#2a2a2a] rounded-lg p-6">
+          <div className="border border-theme-border-base rounded-lg p-6">
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="currentPassword" className="text-[#888888] font-mono uppercase text-xs tracking-wider">
+                <Label htmlFor="currentPassword" className="text-theme-secondary font-mono uppercase text-xs tracking-wider">
                   Current Password
                 </Label>
                 <Input
@@ -529,12 +529,12 @@ export default function SettingsPage() {
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
                   placeholder="Enter current password"
-                  className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] placeholder:text-[#888888] focus:border-[#00ff88] focus:ring-1 focus:ring-[#00ff88] font-mono transition-colors duration-150 ease-linear"
+                  className="bg-theme-bg-elevated border-theme-border-base text-theme-foreground placeholder:text-theme-muted focus:border-theme-primary focus:ring-1 focus:ring-theme-primary font-mono transition-colors duration-150 ease-linear"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="newPassword" className="text-[#888888] font-mono uppercase text-xs tracking-wider">
+                <Label htmlFor="newPassword" className="text-theme-secondary font-mono uppercase text-xs tracking-wider">
                   New Password
                 </Label>
                 <Input
@@ -543,12 +543,12 @@ export default function SettingsPage() {
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   placeholder="Enter new password"
-                  className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] placeholder:text-[#888888] focus:border-[#00ff88] focus:ring-1 focus:ring-[#00ff88] font-mono transition-colors duration-150 ease-linear"
+                  className="bg-theme-bg-elevated border-theme-border-base text-theme-foreground placeholder:text-theme-muted focus:border-theme-primary focus:ring-1 focus:ring-theme-primary font-mono transition-colors duration-150 ease-linear"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword" className="text-[#888888] font-mono uppercase text-xs tracking-wider">
+                <Label htmlFor="confirmPassword" className="text-theme-secondary font-mono uppercase text-xs tracking-wider">
                   Confirm New Password
                 </Label>
                 <Input
@@ -557,15 +557,15 @@ export default function SettingsPage() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Confirm new password"
-                  className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] placeholder:text-[#888888] focus:border-[#00ff88] focus:ring-1 focus:ring-[#00ff88] font-mono transition-colors duration-150 ease-linear"
+                  className="bg-theme-bg-elevated border-theme-border-base text-theme-foreground placeholder:text-theme-muted focus:border-theme-primary focus:ring-1 focus:ring-theme-primary font-mono transition-colors duration-150 ease-linear"
                 />
               </div>
 
-              <div className="flex justify-end pt-4 border-t border-[#2a2a2a]">
+              <div className="flex justify-end pt-4 border-t border-theme-border-base">
                 <Button
                   onClick={handleChangePassword}
                   disabled={isLoading}
-                  className="bg-[#00ff88] text-[#0a0a0a] hover:bg-[#00ff88]/90 font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
+                  className="bg-theme-primary text-theme-inverted hover:bg-theme-primary/90 font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
                 >
                   {isLoading ? (
                     <Loader2 className="size-4 mr-2 animate-spin" />
@@ -583,25 +583,25 @@ export default function SettingsPage() {
           {authConfig.twoFactor && (
             <>
               <div className="relative">
-                <div className="absolute inset-x-0 top-3 border-t border-[#2a2a2a]" />
-                <h2 className="relative inline-block bg-[#0a0a0a] pr-4 text-sm font-mono uppercase tracking-wider text-[#888888]">
+                <div className="absolute inset-x-0 top-3 border-t border-theme-border-base" />
+                <h2 className="relative inline-block bg-theme-bg-base pr-4 text-sm font-mono uppercase tracking-wider text-theme-secondary">
                   <Smartphone className="inline-block size-4 mr-2 mb-1" />
                   Two-Factor Authentication
                 </h2>
               </div>
 
-              <div className="border border-[#2a2a2a] rounded-lg p-6">
+              <div className="border border-theme-border-base rounded-lg p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <p className="text-[#888888] font-mono uppercase text-xs">Status</p>
+                    <p className="text-theme-secondary font-mono uppercase text-xs">Status</p>
                     <p
-                      className={`text-sm font-mono ${twoFactorEnabled ? "text-[#00ff88]" : "text-[#888888]"}`}
+                      className={`text-sm font-mono ${twoFactorEnabled ? "text-theme-foreground" : "text-theme-secondary"}`}
                     >
                       {twoFactorEnabled ? "Enabled" : "Disabled"}
                     </p>
                   </div>
                   <div
-                    className={`px-3 py-1 rounded text-xs font-mono uppercase tracking-wider ${twoFactorEnabled ? "bg-[#00ff88]/20 text-[#00ff88]" : "bg-[#2a2a2a] text-[#888888]"}`}
+                    className={`px-3 py-1 rounded text-xs font-mono uppercase tracking-wider ${twoFactorEnabled ? "bg-theme-primary/20 text-theme-foreground" : "bg-theme-border-base text-theme-secondary"}`}
                   >
                     {twoFactorEnabled ? "Active" : "Inactive"}
                   </div>
@@ -609,12 +609,12 @@ export default function SettingsPage() {
 
                 {!twoFactorEnabled ? (
                   <div className="space-y-4">
-                    <p className="text-sm text-[#888888] font-mono">
+                    <p className="text-sm text-theme-secondary font-mono">
                       Add an extra layer of security to your account by enabling
                       two-factor authentication.
                     </p>
                     <div className="space-y-2">
-                      <Label htmlFor="2faPassword" className="text-[#888888] font-mono uppercase text-xs tracking-wider">
+                      <Label htmlFor="2faPassword" className="text-theme-secondary font-mono uppercase text-xs tracking-wider">
                         Enter your password to enable 2FA
                       </Label>
                       <Input
@@ -623,13 +623,13 @@ export default function SettingsPage() {
                         value={currentPassword}
                         onChange={(e) => setCurrentPassword(e.target.value)}
                         placeholder="Your password"
-                        className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] placeholder:text-[#888888] focus:border-[#00ff88] focus:ring-1 focus:ring-[#00ff88] font-mono transition-colors duration-150 ease-linear"
+                        className="bg-theme-bg-elevated border-theme-border-base text-theme-foreground placeholder:text-theme-muted focus:border-theme-primary focus:ring-1 focus:ring-theme-primary font-mono transition-colors duration-150 ease-linear"
                       />
                     </div>
                     <Button
                       onClick={handleEnableTwoFactor}
                       disabled={isLoading || !currentPassword}
-                      className="bg-[#00ff88] text-[#0a0a0a] hover:bg-[#00ff88]/90 font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
+                      className="bg-theme-primary text-theme-inverted hover:bg-theme-primary/90 font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
                     >
                       {isLoading ? (
                         <Loader2 className="size-4 mr-2 animate-spin" />
@@ -642,7 +642,7 @@ export default function SettingsPage() {
                 ) : (
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="viewCodesPassword" className="text-[#888888] font-mono uppercase text-xs tracking-wider">
+                      <Label htmlFor="viewCodesPassword" className="text-theme-secondary font-mono uppercase text-xs tracking-wider">
                         Enter password to manage 2FA
                       </Label>
                       <Input
@@ -651,7 +651,7 @@ export default function SettingsPage() {
                         value={currentPassword}
                         onChange={(e) => setCurrentPassword(e.target.value)}
                         placeholder="Your password"
-                        className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] placeholder:text-[#888888] focus:border-[#00ff88] focus:ring-1 focus:ring-[#00ff88] font-mono transition-colors duration-150 ease-linear"
+                        className="bg-theme-bg-elevated border-theme-border-base text-theme-foreground placeholder:text-theme-muted focus:border-theme-primary focus:ring-1 focus:ring-theme-primary font-mono transition-colors duration-150 ease-linear"
                       />
                     </div>
                     <div className="flex flex-wrap gap-3">
@@ -659,7 +659,7 @@ export default function SettingsPage() {
                         variant="outline"
                         onClick={handleRegenerateBackupCodes}
                         disabled={isLoading || !currentPassword}
-                        className="bg-transparent hover:bg-[#2a2a2a] border-[#2a2a2a] text-[#e5e5e5] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
+                        className="bg-transparent hover:bg-theme-border-base border-theme-border-base text-theme-foreground font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
                       >
                         View/Regenerate Backup Codes
                       </Button>
@@ -667,7 +667,7 @@ export default function SettingsPage() {
                         variant="destructive"
                         onClick={() => setShowDisableTwoFactorDialog(true)}
                         disabled={isLoading}
-                        className="bg-[#ff4444] hover:bg-[#ff4444]/90 text-[#0a0a0a] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
+                        className="bg-theme-error hover:bg-theme-error/90 text-theme-inverted font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
                       >
                         <X className="size-4 mr-2" />
                         Disable 2FA
@@ -682,16 +682,16 @@ export default function SettingsPage() {
           {authConfig.passkey && (
             <>
               <div className="relative">
-                <div className="absolute inset-x-0 top-3 border-t border-[#2a2a2a]" />
+                <div className="absolute inset-x-0 top-3 border-t border-theme-border-base" />
                 <div className="relative flex items-center justify-between">
-                  <h2 className="inline-block bg-[#0a0a0a] pr-4 text-sm font-mono uppercase tracking-wider text-[#888888]">
+                  <h2 className="inline-block bg-theme-bg-base pr-4 text-sm font-mono uppercase tracking-wider text-theme-secondary">
                     <Key className="inline-block size-4 mr-2 mb-1" />
                     Passkeys
                   </h2>
                   <Button
                     size="sm"
                     onClick={() => setShowAddPasskeyDialog(true)}
-                    className="bg-[#00ff88] text-[#0a0a0a] hover:bg-[#00ff88]/90 font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
+                    className="bg-theme-primary text-theme-inverted hover:bg-theme-primary/90 font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
                   >
                     <Plus className="size-4 mr-2" />
                     Add Passkey
@@ -699,9 +699,9 @@ export default function SettingsPage() {
                 </div>
               </div>
 
-              <div className="border border-[#2a2a2a] rounded-lg p-6">
+              <div className="border border-theme-border-base rounded-lg p-6">
                 {passkeys.length === 0 ? (
-                  <p className="text-[#888888] text-sm font-mono">
+                  <p className="text-theme-secondary text-sm font-mono">
                     No passkeys registered. Add a passkey for passwordless sign-in.
                   </p>
                 ) : (
@@ -709,13 +709,13 @@ export default function SettingsPage() {
                     {passkeys.map((passkey) => (
                       <div
                         key={passkey.id}
-                        className="flex items-center justify-between p-3 bg-[#141414] rounded border border-[#2a2a2a]"
+                        className="flex items-center justify-between p-3 bg-theme-bg-elevated rounded border border-theme-border-base"
                       >
                         <div>
-                          <p className="text-[#e5e5e5] font-medium font-mono">
+                          <p className="text-theme-foreground font-medium font-mono">
                             {passkey.name || "Unnamed passkey"}
                           </p>
-                          <p className="text-sm text-[#888888] font-mono">
+                          <p className="text-sm text-theme-secondary font-mono">
                             Added {formatDate(passkey.createdAt)}
                           </p>
                         </div>
@@ -723,7 +723,7 @@ export default function SettingsPage() {
                           variant="ghost"
                           size="icon"
                           onClick={() => setPasskeyToDelete(passkey)}
-                          className="text-[#ff4444] hover:text-[#ff4444] hover:bg-[#ff4444]/10 transition-colors duration-150 ease-linear"
+                          className="text-theme-error hover:text-theme-error hover:bg-theme-error/10 transition-colors duration-150 ease-linear"
                         >
                           <Trash2 className="size-4" />
                         </Button>
@@ -736,9 +736,9 @@ export default function SettingsPage() {
           )}
 
           <div className="relative">
-            <div className="absolute inset-x-0 top-3 border-t border-[#2a2a2a]" />
+            <div className="absolute inset-x-0 top-3 border-t border-theme-border-base" />
             <div className="relative flex items-center justify-between">
-              <h2 className="inline-block bg-[#0a0a0a] pr-4 text-sm font-mono uppercase tracking-wider text-[#888888]">
+              <h2 className="inline-block bg-theme-bg-base pr-4 text-sm font-mono uppercase tracking-wider text-theme-secondary">
                 <Monitor className="inline-block size-4 mr-2 mb-1" />
                 Active Sessions
               </h2>
@@ -748,7 +748,7 @@ export default function SettingsPage() {
                   size="sm"
                   onClick={handleRevokeAllSessions}
                   disabled={isLoading}
-                  className="bg-transparent hover:bg-[#2a2a2a] border-[#2a2a2a] text-[#e5e5e5] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
+                  className="bg-transparent hover:bg-theme-border-base border-theme-border-base text-theme-foreground font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
                 >
                   <LogOut className="size-4 mr-2" />
                   Revoke Others
@@ -757,32 +757,32 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          <div className="border border-[#2a2a2a] rounded-lg p-6">
+          <div className="border border-theme-border-base rounded-lg p-6">
             {sessions.length === 0 ? (
               <div className="flex items-center justify-center py-4">
-                <Loader2 className="size-5 animate-spin text-[#00ff88]" />
+                <Loader2 className="size-5 animate-spin text-theme-foreground" />
               </div>
             ) : (
               <div className="space-y-3">
                 {sessions.map((sess) => (
                   <div
                     key={sess.id}
-                    className="flex items-center justify-between p-3 bg-[#141414] rounded border border-[#2a2a2a]"
+                    className="flex items-center justify-between p-3 bg-theme-bg-elevated rounded border border-theme-border-base"
                   >
                     <div className="flex items-center gap-3">
-                      <Monitor className="size-5 text-[#888888]" />
+                      <Monitor className="size-5 text-theme-secondary" />
                       <div>
                         <div className="flex items-center gap-2">
-                          <p className="text-[#e5e5e5] font-medium font-mono">
+                          <p className="text-theme-foreground font-medium font-mono">
                             {parseUserAgent(sess.userAgent)}
                           </p>
                           {sess.token === currentSessionToken && (
-                            <span className="px-2 py-0.5 text-xs bg-[#00ff88]/20 text-[#00ff88] rounded font-mono uppercase tracking-wider">
+                            <span className="px-2 py-0.5 text-xs bg-theme-primary/20 text-theme-foreground rounded font-mono uppercase tracking-wider">
                               Current
                             </span>
                           )}
                         </div>
-                        <p className="text-sm text-[#888888] font-mono">
+                        <p className="text-sm text-theme-secondary font-mono">
                           {sess.ipAddress || "Unknown IP"} ·{" "}
                           {formatDate(sess.createdAt)}
                         </p>
@@ -794,7 +794,7 @@ export default function SettingsPage() {
                         size="icon"
                         onClick={() => handleRevokeSession(sess.token)}
                         disabled={isLoading}
-                        className="text-[#ff4444] hover:text-[#ff4444] hover:bg-[#ff4444]/10 transition-colors duration-150 ease-linear"
+                        className="text-theme-error hover:text-theme-error hover:bg-theme-error/10 transition-colors duration-150 ease-linear"
                       >
                         <X className="size-4" />
                       </Button>
@@ -808,21 +808,21 @@ export default function SettingsPage() {
 
         <TabsContent value="accounts" className="space-y-8">
           <div className="relative">
-            <div className="absolute inset-x-0 top-3 border-t border-[#2a2a2a]" />
-            <h2 className="relative inline-block bg-[#0a0a0a] pr-4 text-sm font-mono uppercase tracking-wider text-[#888888]">
+            <div className="absolute inset-x-0 top-3 border-t border-theme-border-base" />
+            <h2 className="relative inline-block bg-theme-bg-base pr-4 text-sm font-mono uppercase tracking-wider text-theme-secondary">
               <Link2 className="inline-block size-4 mr-2 mb-1" />
               Connected Accounts
             </h2>
           </div>
 
-          <div className="border border-[#2a2a2a] rounded-lg p-6">
+          <div className="border border-theme-border-base rounded-lg p-6">
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-[#141414] rounded border border-[#2a2a2a]">
+              <div className="flex items-center justify-between p-4 bg-theme-bg-elevated rounded border border-theme-border-base">
                 <div className="flex items-center gap-3">
-                  <Github className="size-6 text-[#e5e5e5]" />
+                  <Github className="size-6 text-theme-foreground" />
                   <div>
-                    <p className="text-[#e5e5e5] font-medium font-mono">GitHub</p>
-                    <p className="text-sm text-[#888888] font-mono">
+                    <p className="text-theme-foreground font-medium font-mono">GitHub</p>
+                    <p className="text-sm text-theme-secondary font-mono">
                       {connectedAccounts.github
                         ? "Connected"
                         : "Not connected"}
@@ -835,7 +835,7 @@ export default function SettingsPage() {
                     size="sm"
                     onClick={() => handleUnlinkAccount("github")}
                     disabled={isLoading}
-                    className="bg-transparent hover:bg-[#2a2a2a] border-[#2a2a2a] text-[#e5e5e5] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
+                    className="bg-transparent hover:bg-theme-border-base border-theme-border-base text-theme-foreground font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
                   >
                     Disconnect
                   </Button>
@@ -843,19 +843,19 @@ export default function SettingsPage() {
                   <Button
                     size="sm"
                     onClick={() => handleLinkSocial("github")}
-                    className="bg-[#00ff88] text-[#0a0a0a] hover:bg-[#00ff88]/90 font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
+                    className="bg-theme-primary text-theme-inverted hover:bg-theme-primary/90 font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
                   >
                     Connect
                   </Button>
                 )}
               </div>
 
-              <div className="flex items-center justify-between p-4 bg-[#141414] rounded border border-[#2a2a2a]">
+              <div className="flex items-center justify-between p-4 bg-theme-bg-elevated rounded border border-theme-border-base">
                 <div className="flex items-center gap-3">
-                  <Mail className="size-6 text-[#e5e5e5]" />
+                  <Mail className="size-6 text-theme-foreground" />
                   <div>
-                    <p className="text-[#e5e5e5] font-medium font-mono">Google</p>
-                    <p className="text-sm text-[#888888] font-mono">
+                    <p className="text-theme-foreground font-medium font-mono">Google</p>
+                    <p className="text-sm text-theme-secondary font-mono">
                       {connectedAccounts.google
                         ? "Connected"
                         : "Not connected"}
@@ -868,7 +868,7 @@ export default function SettingsPage() {
                     size="sm"
                     onClick={() => handleUnlinkAccount("google")}
                     disabled={isLoading}
-                    className="bg-transparent hover:bg-[#2a2a2a] border-[#2a2a2a] text-[#e5e5e5] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
+                    className="bg-transparent hover:bg-theme-border-base border-theme-border-base text-theme-foreground font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
                   >
                     Disconnect
                   </Button>
@@ -876,7 +876,7 @@ export default function SettingsPage() {
                   <Button
                     size="sm"
                     onClick={() => handleLinkSocial("google")}
-                    className="bg-[#00ff88] text-[#0a0a0a] hover:bg-[#00ff88]/90 font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
+                    className="bg-theme-primary text-theme-inverted hover:bg-theme-primary/90 font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
                   >
                     Connect
                   </Button>
@@ -888,10 +888,10 @@ export default function SettingsPage() {
       </Tabs>
 
       <Dialog open={showTwoFactorDialog} onOpenChange={setShowTwoFactorDialog}>
-        <DialogContent className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] font-mono max-w-md">
+        <DialogContent className="bg-theme-bg-elevated border-theme-border-base text-theme-foreground font-mono max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-[#e5e5e5] font-mono uppercase tracking-wider">Set Up Two-Factor Authentication</DialogTitle>
-            <DialogDescription className="text-[#888888] font-mono">
+            <DialogTitle className="text-theme-foreground font-mono uppercase tracking-wider">Set Up Two-Factor Authentication</DialogTitle>
+            <DialogDescription className="text-theme-secondary font-mono">
               Scan the QR code with your authenticator app
             </DialogDescription>
           </DialogHeader>
@@ -913,17 +913,17 @@ export default function SettingsPage() {
         open={showDisableTwoFactorDialog}
         onOpenChange={setShowDisableTwoFactorDialog}
       >
-        <DialogContent className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] font-mono">
+        <DialogContent className="bg-theme-bg-elevated border-theme-border-base text-theme-foreground font-mono">
           <DialogHeader>
-            <DialogTitle className="text-[#e5e5e5] font-mono uppercase tracking-wider">Disable Two-Factor Authentication</DialogTitle>
-            <DialogDescription className="text-[#888888] font-mono">
+            <DialogTitle className="text-theme-foreground font-mono uppercase tracking-wider">Disable Two-Factor Authentication</DialogTitle>
+            <DialogDescription className="text-theme-secondary font-mono">
               Enter your password to disable 2FA. This will make your account
               less secure.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="disablePassword" className="text-[#888888] font-mono uppercase text-xs tracking-wider">
+              <Label htmlFor="disablePassword" className="text-theme-secondary font-mono uppercase text-xs tracking-wider">
                 Password
               </Label>
               <Input
@@ -932,7 +932,7 @@ export default function SettingsPage() {
                 value={disableTwoFactorPassword}
                 onChange={(e) => setDisableTwoFactorPassword(e.target.value)}
                 placeholder="Enter your password"
-                className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] placeholder:text-[#888888] focus:border-[#00ff88] focus:ring-1 focus:ring-[#00ff88] font-mono transition-colors duration-150 ease-linear"
+                className="bg-theme-bg-elevated border-theme-border-base text-theme-foreground placeholder:text-theme-muted focus:border-theme-primary focus:ring-1 focus:ring-theme-primary font-mono transition-colors duration-150 ease-linear"
               />
             </div>
           </div>
@@ -940,7 +940,7 @@ export default function SettingsPage() {
             <Button
               variant="outline"
               onClick={() => setShowDisableTwoFactorDialog(false)}
-              className="bg-transparent hover:bg-[#2a2a2a] border-[#2a2a2a] text-[#e5e5e5] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
+              className="bg-transparent hover:bg-theme-border-base border-theme-border-base text-theme-foreground font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
             >
               Cancel
             </Button>
@@ -948,7 +948,7 @@ export default function SettingsPage() {
               variant="destructive"
               onClick={handleDisableTwoFactor}
               disabled={isLoading || !disableTwoFactorPassword}
-              className="bg-[#ff4444] hover:bg-[#ff4444]/90 text-[#0a0a0a] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
+              className="bg-theme-error hover:bg-theme-error/90 text-theme-inverted font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
             >
               {isLoading ? (
                 <Loader2 className="size-4 mr-2 animate-spin" />
@@ -960,10 +960,10 @@ export default function SettingsPage() {
       </Dialog>
 
       <Dialog open={showBackupCodesDialog} onOpenChange={setShowBackupCodesDialog}>
-        <DialogContent className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] font-mono">
+        <DialogContent className="bg-theme-bg-elevated border-theme-border-base text-theme-foreground font-mono">
           <DialogHeader>
-            <DialogTitle className="text-[#e5e5e5] font-mono uppercase tracking-wider">Backup Codes</DialogTitle>
-            <DialogDescription className="text-[#888888] font-mono">
+            <DialogTitle className="text-theme-foreground font-mono uppercase tracking-wider">Backup Codes</DialogTitle>
+            <DialogDescription className="text-theme-secondary font-mono">
               Save these codes in a secure location. Each code can only be used
               once.
             </DialogDescription>
@@ -973,16 +973,16 @@ export default function SettingsPage() {
               {backupCodes.map((code, index) => (
                 <div
                   key={index}
-                  className="bg-[#0a0a0a] border border-[#2a2a2a] rounded px-3 py-2"
+                  className="bg-theme-bg-base border border-theme-border-base rounded px-3 py-2"
                 >
-                  <code className="text-sm font-mono text-[#00ff88]">{code}</code>
+                  <code className="text-sm font-mono text-theme-foreground">{code}</code>
                 </div>
               ))}
             </div>
             <Button
               variant="outline"
               onClick={handleCopyBackupCodes}
-              className="w-full bg-transparent hover:bg-[#2a2a2a] border-[#2a2a2a] text-[#e5e5e5] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
+              className="w-full bg-transparent hover:bg-theme-border-base border-theme-border-base text-theme-foreground font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
             >
               {backupCodesCopied ? (
                 <>
@@ -1001,16 +1001,16 @@ export default function SettingsPage() {
       </Dialog>
 
       <Dialog open={showAddPasskeyDialog} onOpenChange={setShowAddPasskeyDialog}>
-        <DialogContent className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] font-mono">
+        <DialogContent className="bg-theme-bg-elevated border-theme-border-base text-theme-foreground font-mono">
           <DialogHeader>
-            <DialogTitle className="text-[#e5e5e5] font-mono uppercase tracking-wider">Add Passkey</DialogTitle>
-            <DialogDescription className="text-[#888888] font-mono">
+            <DialogTitle className="text-theme-foreground font-mono uppercase tracking-wider">Add Passkey</DialogTitle>
+            <DialogDescription className="text-theme-secondary font-mono">
               Give your passkey a name to identify it later
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="passkeyName" className="text-[#888888] font-mono uppercase text-xs tracking-wider">
+              <Label htmlFor="passkeyName" className="text-theme-secondary font-mono uppercase text-xs tracking-wider">
                 Passkey Name
               </Label>
               <Input
@@ -1019,7 +1019,7 @@ export default function SettingsPage() {
                 value={passkeyName}
                 onChange={(e) => setPasskeyName(e.target.value)}
                 placeholder="e.g., MacBook Pro"
-                className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] placeholder:text-[#888888] focus:border-[#00ff88] focus:ring-1 focus:ring-[#00ff88] font-mono transition-colors duration-150 ease-linear"
+                className="bg-theme-bg-elevated border-theme-border-base text-theme-foreground placeholder:text-theme-muted focus:border-theme-primary focus:ring-1 focus:ring-theme-primary font-mono transition-colors duration-150 ease-linear"
               />
             </div>
           </div>
@@ -1030,14 +1030,14 @@ export default function SettingsPage() {
                 setShowAddPasskeyDialog(false);
                 setPasskeyName("");
               }}
-              className="bg-transparent hover:bg-[#2a2a2a] border-[#2a2a2a] text-[#e5e5e5] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
+              className="bg-transparent hover:bg-theme-border-base border-theme-border-base text-theme-foreground font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
             >
               Cancel
             </Button>
             <Button
               onClick={handleAddPasskey}
               disabled={isLoading || !passkeyName.trim()}
-              className="bg-[#00ff88] text-[#0a0a0a] hover:bg-[#00ff88]/90 font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
+              className="bg-theme-primary text-theme-inverted hover:bg-theme-primary/90 font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
             >
               {isLoading ? (
                 <Loader2 className="size-4 mr-2 animate-spin" />
@@ -1054,10 +1054,10 @@ export default function SettingsPage() {
         open={!!passkeyToDelete}
         onOpenChange={(open) => !open && setPasskeyToDelete(null)}
       >
-        <DialogContent className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] font-mono">
+        <DialogContent className="bg-theme-bg-elevated border-theme-border-base text-theme-foreground font-mono">
           <DialogHeader>
-            <DialogTitle className="text-[#e5e5e5] font-mono uppercase tracking-wider">Delete Passkey</DialogTitle>
-            <DialogDescription className="text-[#888888] font-mono">
+            <DialogTitle className="text-theme-foreground font-mono uppercase tracking-wider">Delete Passkey</DialogTitle>
+            <DialogDescription className="text-theme-secondary font-mono">
               Are you sure you want to delete &quot;{passkeyToDelete?.name || "this passkey"}&quot;? This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
@@ -1065,7 +1065,7 @@ export default function SettingsPage() {
             <Button
               variant="outline"
               onClick={() => setPasskeyToDelete(null)}
-              className="bg-transparent hover:bg-[#2a2a2a] border-[#2a2a2a] text-[#e5e5e5] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
+              className="bg-transparent hover:bg-theme-border-base border-theme-border-base text-theme-foreground font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
             >
               Cancel
             </Button>
@@ -1073,7 +1073,7 @@ export default function SettingsPage() {
               variant="destructive"
               onClick={handleDeletePasskey}
               disabled={isLoading}
-              className="bg-[#ff4444] hover:bg-[#ff4444]/90 text-[#0a0a0a] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
+              className="bg-theme-error hover:bg-theme-error/90 text-theme-inverted font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear"
             >
               {isLoading ? (
                 <Loader2 className="size-4 mr-2 animate-spin" />

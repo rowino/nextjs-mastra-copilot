@@ -10,18 +10,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth-client";
 import { UserAvatar } from "./user-avatar";
-import { useAuthContext } from "@/hooks/use-auth-context";
 
 interface UserDropdownProps {
   user: {
-    name?: string;
+    name?: string | null;
     email: string;
     image?: string | null;
   };
 }
 
 export function UserDropdown({ user }: UserDropdownProps) {
-  const { currentOrganization } = useAuthContext();
 
   const handleSignOut = async () => {
     try {

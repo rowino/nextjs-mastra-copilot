@@ -15,7 +15,7 @@ type Organization = {
 type AuthContextType = {
   userId: string;
   email: string;
-  orgId: string;
+  orgId: string | null;
   roles: ("admin" | "user")[];
   organizations: Organization[];
   isAdmin: boolean;
@@ -47,7 +47,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       const orgsData = (await orgsResponse.json()) as { organizations: Organization[] };
-      const currentData = (await currentResponse.json()) as { orgId: string };
+      const currentData = (await currentResponse.json()) as { orgId: string | null };
 
       setOrganizations(orgsData.organizations || []);
       setCurrentOrgId(currentData.orgId || "");

@@ -5,10 +5,11 @@ import {
   generateId,
   OrgPermissionError,
 } from "@/mastra/tools/shared/org-scoped-db";
-import { member, user } from "@/db/schema";
+import { member, user, organization, invitation } from "@/db/schema";
 import { eq, and, count } from "drizzle-orm";
 import { z } from "zod";
 import { NextRequest } from "next/server";
+import { sendInvitationEmail } from "@/lib/email";
 
 const inviteMemberSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -18,10 +19,6 @@ const inviteMemberSchema = z.object({
 const updateMemberSchema = z.object({
   memberId: z.string().min(1, "Member ID is required"),
   role: z.enum(["admin", "user"], { required_error: "Role is required" }),
-});
-
-const removeMemberSchema = z.object({
-  memberId: z.string().min(1, "Member ID is required"),
 });
 
 type RouteContext = {
@@ -118,9 +115,73 @@ export async function POST(req: NextRequest, context: RouteContext) {
       .get();
 
     if (!targetUser) {
+      // User doesn't exist - send invitation email instead
+      const token = crypto.randomUUID();
+      const expirationDays = parseInt(process.env.INVITE_EXPIRATION_DAYS || "7");
+      const expiresAt = new Date();
+      expiresAt.setDate(expiresAt.getDate() + expirationDays);
+
+      // Check if user already has pending invitation
+      const existingInvite = await db
+        .select()
+        .from(invitation)
+        .where(
+          and(
+            eq(invitation.organizationId, orgId),
+            eq(invitation.email, email),
+            eq(invitation.status, "pending")
+          )
+        )
+        .get();
+
+      if (existingInvite) {
+        return Response.json(
+          { error: "User already has a pending invitation" },
+          { status: 409 }
+        );
+      }
+
+      const invitationId = generateId("inv");
+
+      await db.insert(invitation).values({
+        id: invitationId,
+        organizationId: orgId,
+        email,
+        role,
+        invitedBy: authContext.userId,
+        token,
+        status: "pending",
+        expiresAt,
+        createdAt: new Date(),
+      });
+
+      // Get organization name and inviter name
+      const org = await db
+        .select()
+        .from(organization)
+        .where(eq(organization.id, orgId))
+        .get();
+      const inviter = await db
+        .select()
+        .from(user)
+        .where(eq(user.id, authContext.userId))
+        .get();
+
+      await sendInvitationEmail({
+        to: email,
+        organizationName: org!.name,
+        inviterName: inviter!.name || inviter!.email,
+        role,
+        token,
+        expiresAt,
+      });
+
       return Response.json(
-        { error: "User not found with this email address" },
-        { status: 404 }
+        {
+          message: "Invitation sent successfully",
+          invitationId,
+        },
+        { status: 201 }
       );
     }
 
@@ -139,6 +200,26 @@ export async function POST(req: NextRequest, context: RouteContext) {
     if (existingMembership) {
       return Response.json(
         { error: "User is already a member of this organization" },
+        { status: 409 }
+      );
+    }
+
+    // Check if user already has pending invitation (for existing users)
+    const existingInvite = await db
+      .select()
+      .from(invitation)
+      .where(
+        and(
+          eq(invitation.organizationId, orgId),
+          eq(invitation.email, targetUser.email),
+          eq(invitation.status, "pending")
+        )
+      )
+      .get();
+
+    if (existingInvite) {
+      return Response.json(
+        { error: "User already has a pending invitation" },
         { status: 409 }
       );
     }
