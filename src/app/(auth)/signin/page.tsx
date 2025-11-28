@@ -10,6 +10,7 @@ import { Loader2, Fingerprint, Mail } from "lucide-react";
 
 import { authClient } from "@/lib/auth-client";
 import { authConfig } from "@/lib/auth-config";
+import { routes, getRoute } from "@/lib/routes";
 import { AuthCard } from "@/components/auth/auth-card";
 import { AuthInput } from "@/components/auth/auth-input";
 import { SocialButtons } from "@/components/auth/social-buttons";
@@ -82,7 +83,7 @@ function SignInContent() {
               setIsLoading(false);
               return;
             }
-            router.push("/dashboard");
+            router.push(getRoute(routes.dashboard));
           },
           onError: (ctx) => {
             setAuthError(ctx.error.message || "Failed to sign in");
@@ -126,7 +127,7 @@ function SignInContent() {
         return;
       }
 
-      router.push("/dashboard");
+      router.push(getRoute(routes.dashboard));
     } catch {
       setTwoFactorError("Failed to verify code");
     } finally {
@@ -147,7 +148,7 @@ function SignInContent() {
     try {
       const result = await authClient.signIn.magicLink({
         email,
-        callbackURL: "/dashboard",
+        callbackURL: getRoute(routes.dashboard),
       });
 
       if (result.error) {
@@ -176,7 +177,7 @@ function SignInContent() {
         return;
       }
 
-      router.push("/dashboard");
+      router.push(getRoute(routes.dashboard));
     } catch {
       setAuthError("Passkey authentication failed");
     } finally {
@@ -193,7 +194,7 @@ function SignInContent() {
           <p className="text-center text-sm text-white/60">
             Don&apos;t have an account?{" "}
             <Link
-              href="/signup"
+              href={getRoute(routes.auth.signUp)}
               className="text-white hover:text-white/80 underline underline-offset-4"
             >
               Sign up
@@ -235,7 +236,7 @@ function SignInContent() {
               </Label>
             </div>
             <Link
-              href="/forgot-password"
+              href={getRoute(routes.auth.forgotPassword)}
               className="text-sm text-white/70 hover:text-white underline-offset-4 hover:underline"
             >
               Forgot password?
@@ -264,7 +265,7 @@ function SignInContent() {
 
         <Divider />
 
-        <SocialButtons callbackURL="/dashboard" />
+        <SocialButtons callbackURL={getRoute(routes.dashboard)} />
 
         {(authConfig.magicLink || authConfig.passkey) && (
           <div className="mt-4 space-y-3">

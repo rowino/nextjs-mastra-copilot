@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth-client";
 import { UserAvatar } from "./user-avatar";
+import { routes, getRoute } from "@/lib/routes";
 
 interface UserDropdownProps {
   user: {
@@ -24,7 +25,7 @@ export function UserDropdown({ user }: UserDropdownProps) {
   const handleSignOut = async () => {
     try {
       await authClient.signOut();
-      window.location.href = "/";
+      window.location.href = getRoute(routes.home);
     } catch (error) {
       console.error("Failed to sign out:", error);
       alert("Failed to sign out. Please try again.");
@@ -50,12 +51,12 @@ export function UserDropdown({ user }: UserDropdownProps) {
         </div>
         <DropdownMenuSeparator className="bg-white/10" />
         <DropdownMenuItem asChild>
-          <Link href="/settings" className="cursor-pointer text-white">
+          <Link href={getRoute(routes.settings)} className="cursor-pointer text-white">
             Settings
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="/settings/organization" className="cursor-pointer text-white">
+          <Link href={getRoute(routes.organization.settings)} className="cursor-pointer text-white">
             Organization
           </Link>
         </DropdownMenuItem>

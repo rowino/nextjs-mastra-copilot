@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { routes, getRoute } from "@/lib/routes";
 import {
   Form,
   FormControl,
@@ -42,7 +43,7 @@ export default function CreateOrganizationPage() {
     try {
       setIsCreating(true);
 
-      const response = await fetch("/api/organization", {
+      const response = await fetch(getRoute(routes.api.organization.root), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -67,7 +68,7 @@ export default function CreateOrganizationPage() {
       };
 
       // Switch to the newly created organization
-      const switchResponse = await fetch("/api/organization/switch", {
+      const switchResponse = await fetch(getRoute(routes.api.organization.switch), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ orgId: org.id }),
@@ -83,7 +84,7 @@ export default function CreateOrganizationPage() {
       toast.success("Organization created successfully");
 
       // Full page redirect with reload
-      window.location.href = "/dashboard";
+      window.location.href = getRoute(routes.dashboard);
     } catch (error) {
       console.error("Error creating organization:", error);
       toast.error(

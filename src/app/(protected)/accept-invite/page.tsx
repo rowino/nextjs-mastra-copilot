@@ -4,6 +4,7 @@ import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Loader2, CheckCircle2, XCircle, Mail } from "lucide-react";
+import { routes, getRoute } from "@/lib/routes";
 
 function AcceptInviteContent() {
   const router = useRouter();
@@ -25,7 +26,7 @@ function AcceptInviteContent() {
     setError(null);
 
     try {
-      const response = await fetch("/api/invitations/accept", {
+      const response = await fetch(getRoute(routes.api.invitations.accept), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token }),
@@ -45,7 +46,7 @@ function AcceptInviteContent() {
 
       // Redirect to organization settings after 2 seconds
       setTimeout(() => {
-        router.push(`/settings/organization?orgId=${data.organization.id}`);
+        router.push(getRoute(routes.organization.settings, { orgId: data.organization.id }));
       }, 2000);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to accept invitation");
@@ -67,7 +68,7 @@ function AcceptInviteContent() {
               This invitation link is invalid or incomplete.
             </p>
             <Button
-              onClick={() => router.push("/settings")}
+              onClick={() => router.push(getRoute(routes.settings))}
               className="mt-4 bg-theme-primary text-theme-inverted hover:bg-theme-primary/90"
             >
               Go to Settings
@@ -137,7 +138,7 @@ function AcceptInviteContent() {
 
           <Button
             variant="outline"
-            onClick={() => router.push("/settings")}
+            onClick={() => router.push(getRoute(routes.settings))}
             className="w-full border-theme-border-base text-theme-foreground hover:bg-theme-bg-card hover:border-theme-border-hover"
           >
             Cancel

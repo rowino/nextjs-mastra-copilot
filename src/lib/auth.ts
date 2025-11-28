@@ -31,6 +31,7 @@ export const getAuth = (d1: D1Database) => {
             to: email,
             otp,
             type: type === "sign-in" ? "sign-in" : "sign-up",
+            expiresInMinutes: 10,
           });
         },
       })
@@ -44,6 +45,7 @@ export const getAuth = (d1: D1Database) => {
           await sendMagicLink({
             to: email,
             magicLink: url,
+            expiresInMinutes: 10,
           });
         },
       })
@@ -59,6 +61,7 @@ export const getAuth = (d1: D1Database) => {
               to: user.email,
               otp,
               userName: user.name,
+              expiresInMinutes: 5,
             });
           },
         },
@@ -106,6 +109,7 @@ export const getAuth = (d1: D1Database) => {
           to: user.email,
           resetLink: url,
           userName: user.name,
+          expiresInMinutes: 30,
         });
       },
     },

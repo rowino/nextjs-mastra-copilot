@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/hooks/use-auth-context";
+import { routes, getRoute } from "@/lib/routes";
 import { OrgSettings } from "@/components/organization/org-settings";
 import { MemberList } from "@/components/organization/member-list";
 import { InviteMember } from "@/components/organization/invite-member";
@@ -39,7 +40,7 @@ export default function OrganizationSettingsPage() {
     if (!orgId) return;
 
     try {
-      const response = await fetch(`/api/organization/${orgId}`);
+      const response = await fetch(getRoute(routes.api.organization.byId, { orgId }));
       if (!response.ok) {
         throw new Error("Failed to fetch organization");
       }
@@ -54,7 +55,7 @@ export default function OrganizationSettingsPage() {
     if (!orgId) return;
 
     try {
-      const response = await fetch(`/api/organization/${orgId}/members`);
+      const response = await fetch(getRoute(routes.api.organization.members, { orgId }));
       if (!response.ok) {
         throw new Error("Failed to fetch members");
       }
@@ -75,7 +76,7 @@ export default function OrganizationSettingsPage() {
     if (!authLoading && orgId) {
       fetchData();
     } else if (!authLoading && !orgId) {
-      router.push("/dashboard");
+      router.push(getRoute(routes.dashboard));
     }
   }, [orgId, authLoading, router, fetchData]);
 

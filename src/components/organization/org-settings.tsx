@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/hooks/use-auth-context";
+import { routes, getRoute } from "@/lib/routes";
 import {
   Form,
   FormControl,
@@ -70,7 +71,7 @@ export function OrgSettings({ organization }: OrgSettingsProps) {
     try {
       setIsSaving(true);
 
-      const response = await fetch(`/api/organization/${organization.id}`, {
+      const response = await fetch(getRoute(routes.api.organization.byId, { orgId: organization.id }), {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -106,7 +107,7 @@ export function OrgSettings({ organization }: OrgSettingsProps) {
     try {
       setIsDeleting(true);
 
-      const response = await fetch(`/api/organization/${organization.id}`, {
+      const response = await fetch(getRoute(routes.api.organization.byId, { orgId: organization.id }), {
         method: "DELETE",
       });
 
@@ -116,7 +117,7 @@ export function OrgSettings({ organization }: OrgSettingsProps) {
       }
 
       toast.success("Organization deleted successfully");
-      router.push("/dashboard");
+      router.push(getRoute(routes.dashboard));
       window.location.reload();
     } catch (error) {
       console.error("Error deleting organization:", error);

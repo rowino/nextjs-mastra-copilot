@@ -6,6 +6,7 @@ import Link from "next/link";
 import { CheckCircle2, XCircle, Loader2, Mail } from "lucide-react";
 
 import { authClient } from "@/lib/auth-client";
+import { routes, getRoute } from "@/lib/routes";
 import { AuthCard } from "@/components/auth/auth-card";
 import { OTPInput } from "@/components/auth/otp-input";
 import { Button } from "@/components/ui/button";
@@ -37,7 +38,7 @@ function VerifyContent() {
 
       setStatus("success");
       setTimeout(() => {
-        router.push("/dashboard");
+        router.push(getRoute(routes.dashboard));
       }, 2000);
     } catch {
       setStatus("error");
@@ -76,7 +77,7 @@ function VerifyContent() {
 
       setStatus("success");
       setTimeout(() => {
-        router.push("/dashboard");
+        router.push(getRoute(routes.dashboard));
       }, 2000);
     } catch {
       setErrorMessage("Failed to verify code");
@@ -103,7 +104,7 @@ function VerifyContent() {
           <p className="mt-4 text-white/70">Redirecting to dashboard...</p>
         </div>
         <Button
-          onClick={() => router.push("/dashboard")}
+          onClick={() => router.push(getRoute(routes.dashboard))}
           className="w-full bg-white text-indigo-950 hover:bg-white/90"
         >
           Continue to Dashboard
@@ -120,7 +121,7 @@ function VerifyContent() {
         footer={
           <p className="text-center text-sm text-white/60">
             <Link
-              href="/signin"
+              href={getRoute(routes.auth.signIn)}
               className="text-white hover:text-white/80 underline underline-offset-4"
             >
               Back to sign in
@@ -134,7 +135,7 @@ function VerifyContent() {
         </div>
         <div className="space-y-3">
           <Button
-            onClick={() => router.push("/signup")}
+            onClick={() => router.push(getRoute(routes.auth.signUp))}
             variant="outline"
             className="w-full bg-white/5 hover:bg-white/10 border-white/10 text-white"
           >
@@ -153,7 +154,7 @@ function VerifyContent() {
         <p className="text-center text-sm text-white/60">
           Didn&apos;t receive the code?{" "}
           <Link
-            href="/signin"
+            href={getRoute(routes.auth.signIn)}
             className="text-white hover:text-white/80 underline underline-offset-4"
           >
             Try again

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader2, X, Mail, Clock } from "lucide-react";
 import { toast } from "sonner";
+import { routes, getRoute } from "@/lib/routes";
 
 interface Invitation {
   id: string;
@@ -27,7 +28,7 @@ export function InvitationList({ orgId }: InvitationListProps) {
 
   const fetchInvitations = async () => {
     try {
-      const response = await fetch(`/api/organization/${orgId}/invitations`);
+      const response = await fetch(getRoute(routes.api.organization.invitations, { orgId }));
       if (!response.ok) {
         throw new Error("Failed to fetch invitations");
       }
@@ -52,7 +53,7 @@ export function InvitationList({ orgId }: InvitationListProps) {
     setCancellingId(invitationId);
     try {
       const response = await fetch(
-        `/api/organization/${orgId}/invitations?invitationId=${invitationId}`,
+        getRoute(routes.api.organization.invitations, { orgId, invitationId }),
         { method: "DELETE" }
       );
 

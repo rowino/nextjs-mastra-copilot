@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAuthContext } from "@/hooks/use-auth-context";
+import { routes, getRoute } from "@/lib/routes";
 import {
   Form,
   FormControl,
@@ -58,7 +59,7 @@ export function InviteMember({ orgId, onMemberAdded }: InviteMemberProps) {
     try {
       setIsInviting(true);
 
-      const response = await fetch(`/api/organization/${orgId}/members`, {
+      const response = await fetch(getRoute(routes.api.organization.members, { orgId }), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

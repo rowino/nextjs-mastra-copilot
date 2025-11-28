@@ -11,6 +11,7 @@ import { authClient } from "@/lib/auth-client";
 import { AuthCard } from "@/components/auth/auth-card";
 import { AuthInput } from "@/components/auth/auth-input";
 import { Button } from "@/components/ui/button";
+import { routes, getRoute } from "@/lib/routes";
 
 const forgotPasswordSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -34,7 +35,7 @@ export default function ForgotPasswordPage() {
   const onSubmit = async (data: ForgotPasswordFormData) => {
     const { error } = await authClient.requestPasswordReset({
       email: data.email,
-      redirectTo: "/reset-password",
+      redirectTo: routes.auth.resetPassword,
     });
 
     if (error) {
@@ -63,7 +64,7 @@ export default function ForgotPasswordPage() {
             <span className="font-medium text-white">{submittedEmail}</span>
           </p>
           <Link
-            href="/sign-in"
+            href={getRoute(routes.auth.signIn)}
             className="inline-flex items-center gap-2 text-sm text-white/70 transition-colors hover:text-white"
           >
             <ArrowLeft className="size-4" />
@@ -104,7 +105,7 @@ export default function ForgotPasswordPage() {
 
       <div className="mt-6 text-center">
         <Link
-          href="/sign-in"
+          href={getRoute(routes.auth.signIn)}
           className="inline-flex items-center gap-2 text-sm text-white/70 transition-colors hover:text-white"
         >
           <ArrowLeft className="size-4" />

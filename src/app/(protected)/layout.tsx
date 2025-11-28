@@ -7,6 +7,7 @@ import { authClient } from "@/lib/auth-client";
 import { UserDropdown } from "@/components/user/user-dropdown";
 import { AuthProvider, useAuthContext } from "@/hooks/use-auth-context";
 import { OrgSwitcher } from "@/components/organization/org-switcher";
+import { routes, getRoute } from "@/lib/routes";
 
 function OrgRedirectGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -14,13 +15,13 @@ function OrgRedirectGuard({ children }: { children: React.ReactNode }) {
   const { orgId, isLoading } = useAuthContext();
 
   useEffect(() => {
-    if (!isLoading && !orgId && pathname !== "/create-organization") {
-      router.replace("/create-organization");
+    if (!isLoading && !orgId && pathname !== getRoute(routes.organization.create)) {
+      router.replace(getRoute(routes.organization.create));
     }
   }, [isLoading, orgId, pathname, router]);
 
   // Don't render children if redirecting
-  if (!isLoading && !orgId && pathname !== "/create-organization") {
+  if (!isLoading && !orgId && pathname !== getRoute(routes.organization.create)) {
     return null;
   }
 
@@ -37,7 +38,7 @@ export default function ProtectedLayout({
 
   useEffect(() => {
     if (!isPending && !session) {
-      router.replace("/signin");
+      router.replace(getRoute(routes.auth.signIn));
     }
   }, [isPending, session, router]);
 
@@ -71,7 +72,7 @@ function LayoutContent({
 }) {
   const pathname = usePathname();
   const { orgId } = useAuthContext();
-  const showHeader = orgId || pathname === "/create-organization";
+  const showHeader = orgId || pathname === getRoute(routes.organization.create);
 
   return (
     <div className="min-h-screen flex flex-col bg-theme-bg-base font-mono">
@@ -81,7 +82,7 @@ function LayoutContent({
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center gap-8">
                 <Link
-                  href="/"
+                  href={getRoute(routes.home)}
                   className="text-xl font-bold text-theme-foreground hover:text-theme-foreground/80 transition-colors duration-150 ease-linear"
                 >
                   MASTRA
@@ -89,7 +90,7 @@ function LayoutContent({
                 {orgId && (
                   <nav className="flex items-center gap-6">
                     <Link
-                      href="/dashboard"
+                      href={getRoute(routes.dashboard)}
                       className="text-sm text-theme-secondary hover:text-theme-foreground transition-colors duration-150 ease-linear uppercase tracking-wider"
                     >
                       Dashboard

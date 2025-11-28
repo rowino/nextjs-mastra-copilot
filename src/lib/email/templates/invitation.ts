@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { sendEmail } from "../send";
 import { InvitationEmail } from "@/emails/invitation-email";
+import { routes, getRoute } from "@/lib/routes";
 
 const SendInvitationEmailParamsSchema = z.object({
   to: z.string().email(),
@@ -16,7 +17,7 @@ type SendInvitationEmailParams = z.infer<typeof SendInvitationEmailParamsSchema>
 export async function sendInvitationEmail(params: SendInvitationEmailParams) {
   const validated = SendInvitationEmailParamsSchema.parse(params);
 
-  const inviteLink = `${process.env.APP_URL || "http://localhost:3000"}/accept-invite?token=${validated.token}`;
+  const inviteLink = getRoute(routes.organization.acceptInvite, { token: validated.token }, true);
 
   await sendEmail({
     to: validated.to,

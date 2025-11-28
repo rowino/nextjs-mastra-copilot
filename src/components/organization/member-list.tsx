@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useAuthContext } from "@/hooks/use-auth-context";
+import { routes, getRoute } from "@/lib/routes";
 import {
   Table,
   TableBody,
@@ -59,7 +60,7 @@ export function MemberList({ orgId, members, onMembersChange }: MemberListProps)
     try {
       setUpdatingMemberId(memberId);
 
-      const response = await fetch(`/api/organization/${orgId}/members`, {
+      const response = await fetch(getRoute(routes.api.organization.members, { orgId }), {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ memberId, role: newRole }),
@@ -95,7 +96,7 @@ export function MemberList({ orgId, members, onMembersChange }: MemberListProps)
 
     try {
       const response = await fetch(
-        `/api/organization/${orgId}/members?memberId=${removingMemberId}`,
+        getRoute(routes.api.organization.members, { orgId, memberId: removingMemberId }),
         {
           method: "DELETE",
         }
