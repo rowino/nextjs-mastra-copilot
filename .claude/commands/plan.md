@@ -6,7 +6,38 @@ Goal: Create a comprehensive plan for a new feature, ensuring clarity, constitut
 
 Input: Feature description or existing plan.
 
-## Step 1: Specify & Clarify
+***USE THE PLAN TOOL!***
+
+## Step 1: Setup Feature Branch
+
+Goal: Ensure work is isolated in a dedicated branch.
+
+Execution steps:
+
+1.  **Create Branch**:
+    -   Determine a slug for the feature (e.g., `user-auth`).
+    -   Create and switch to a new branch: `git checkout -b feature/{feature-slug}`.
+
+## Step 2: Research
+
+Goal: Gather context on libraries and tools needed for the feature.
+
+Execution steps:
+
+1.  **Identify Dependencies**:
+    -   List libraries or technologies required (e.g., `mastra`, `nextjs`, `better-auth`).
+
+2.  **Check Existing Research**:
+    -   Look for existing research in `.agents/research/{library}/`.
+
+3.  **Conduct Research**:
+    -   If research is missing or outdated, use available tools (search, context7, docs, mcp-tools) to gather info.
+    -   Focus on usage patterns, best practices, and limitations.
+
+4.  **Store Findings**:
+    -   Save the research to `.agents/research/{library}/{topic}.md`.
+
+## Step 3: Specify & Clarify
 
 Goal: Define the feature requirements and resolve ambiguities.
 
@@ -25,27 +56,23 @@ Execution steps:
     -   Update the understanding based on answers.
 
 4.  **Create/Update Spec**:
-    -   Create a new folder in `.agents/specs/{feature-slug}/`.
-    -   Write requirements to `.agents/specs/{feature-slug}/specs.md`.
+    - Create a new folder in `.agents/specs/{feature-slug}/`.
+    - Write requirements to `.agents/specs/{feature-slug}/specs.md`.
+    - Include user stories and acceptance criteria.
 
-## Step 2: Define Tasks & Artifacts
+## Step 4: Define Tasks & Artifacts
 
 Goal: Break down the feature into actionable tasks and supporting design documents.
 
 Execution steps:
 
-1.  **Generate Artifacts**:
-    -   **Research**: (Optional) Create `.agents/specs/{feature-slug}/research.md` for technical decisions.
-    -   **Data Model**: (Optional) Create `.agents/specs/{feature-slug}/data-model.md` for schema definitions.
-    -   **Contracts**: (Optional) Create `.agents/specs/{feature-slug}/contracts/` for API specs.
-
-2.  **Generate Tasks**:
+1.  **Generate Tasks**:
     -   Create `.agents/specs/{feature-slug}/tasks.md`.
     -   **Phases**: Setup, Tests, Core, Integration, Polish.
     -   **Dependencies**: Order tasks logically (Setup -> Tests -> Core -> ...).
     -   **Parallelism**: Mark independent tasks with [P].
 
-## Step 3: Analyze Plan
+## Step 5: Analyze Plan
 
 Goal: Review the generated plan for critical issues.
 
@@ -60,7 +87,7 @@ Execution steps:
     -   List Critical Issues, Gaps, and Suggestions.
     -   Verdict: APPROVED or NEEDS REVISION.
 
-## Step 4: Handoff
+## Step 6: Handoff
 
 Goal: Transition to implementation.
 
