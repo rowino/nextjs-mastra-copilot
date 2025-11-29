@@ -222,3 +222,4 @@ This project follows constitutional principles defined in `.specify/memory/const
 5. **Progressive Enhancement** - Server-first rendering, client enhancement
 
 See constitution for full governance rules and quality gates.
+- don't run build in between tasks, run it at the end

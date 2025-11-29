@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAuthContext } from "@/hooks/use-auth-context";
+import { routes, getRoute } from "@/lib/routes";
 import {
   Form,
   FormControl,
@@ -58,7 +59,7 @@ export function InviteMember({ orgId, onMemberAdded }: InviteMemberProps) {
     try {
       setIsInviting(true);
 
-      const response = await fetch(`/api/organization/${orgId}/members`, {
+      const response = await fetch(getRoute(routes.api.organization.members, { orgId }), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -95,17 +96,17 @@ export function InviteMember({ orgId, onMemberAdded }: InviteMemberProps) {
           name="email"
           render={({ field }) => (
             <FormItem className="flex-1">
-              <FormLabel className="text-[#888888] font-mono uppercase text-xs tracking-wider">Email Address</FormLabel>
+              <FormLabel className="text-theme-secondary font-mono uppercase text-xs tracking-wider">Email Address</FormLabel>
               <FormControl>
                 <Input
                   type="email"
                   placeholder="user@example.com"
                   {...field}
                   disabled={isInviting}
-                  className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] placeholder:text-[#888888] focus:border-[#00ff88] focus:ring-1 focus:ring-[#00ff88] font-mono transition-colors duration-150 ease-linear"
+                  className="bg-theme-bg-elevated border-theme-border-base text-theme-foreground placeholder:text-theme-muted focus:border-theme-primary focus:ring-1 focus:ring-theme-primary font-mono transition-colors duration-150 ease-linear"
                 />
               </FormControl>
-              <FormMessage className="text-[#ff4444] font-mono text-xs" />
+              <FormMessage className="text-theme-error font-mono text-xs" />
             </FormItem>
           )}
         />
@@ -115,23 +116,23 @@ export function InviteMember({ orgId, onMemberAdded }: InviteMemberProps) {
           name="role"
           render={({ field }) => (
             <FormItem className="w-32">
-              <FormLabel className="text-[#888888] font-mono uppercase text-xs tracking-wider">Role</FormLabel>
+              <FormLabel className="text-theme-secondary font-mono uppercase text-xs tracking-wider">Role</FormLabel>
               <Select
                 onValueChange={field.onChange}
                 defaultValue={field.value}
                 disabled={isInviting}
               >
                 <FormControl>
-                  <SelectTrigger className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5] focus:border-[#00ff88] focus:ring-1 focus:ring-[#00ff88] font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear">
+                  <SelectTrigger className="bg-theme-bg-elevated border-theme-border-base text-theme-foreground focus:border-theme-primary focus:ring-1 focus:ring-theme-primary font-mono uppercase text-xs tracking-wider transition-colors duration-150 ease-linear">
                     <SelectValue placeholder="Role" />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent className="bg-[#141414] border-[#2a2a2a] text-[#e5e5e5]">
-                  <SelectItem value="user" className="text-[#e5e5e5] font-mono uppercase text-xs focus:bg-[#2a2a2a] focus:text-[#00ff88]">User</SelectItem>
-                  <SelectItem value="admin" className="text-[#e5e5e5] font-mono uppercase text-xs focus:bg-[#2a2a2a] focus:text-[#00ff88]">Admin</SelectItem>
+                <SelectContent className="bg-theme-bg-elevated border-theme-border-base text-theme-foreground">
+                  <SelectItem value="user" className="text-theme-foreground font-mono uppercase text-xs focus:bg-theme-bg-hover focus:text-theme-foreground">User</SelectItem>
+                  <SelectItem value="admin" className="text-theme-foreground font-mono uppercase text-xs focus:bg-theme-bg-hover focus:text-theme-foreground">Admin</SelectItem>
                 </SelectContent>
               </Select>
-              <FormMessage className="text-[#ff4444] font-mono text-xs" />
+              <FormMessage className="text-theme-error font-mono text-xs" />
             </FormItem>
           )}
         />
@@ -139,7 +140,7 @@ export function InviteMember({ orgId, onMemberAdded }: InviteMemberProps) {
         <Button
           type="submit"
           disabled={isInviting}
-          className="bg-[#00ff88] text-[#0a0a0a] hover:bg-[#00ff88]/90 font-mono uppercase text-xs tracking-wider h-10 px-6 transition-colors duration-150 ease-linear"
+          className="bg-theme-primary text-theme-inverted hover:bg-theme-primary/90 font-mono uppercase text-xs tracking-wider h-10 px-6 transition-colors duration-150 ease-linear"
         >
           <UserPlus className="h-4 w-4 mr-2" />
           {isInviting ? "Inviting..." : "Invite"}

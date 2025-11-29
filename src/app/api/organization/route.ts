@@ -1,7 +1,7 @@
 import { authenticateRequest, setActiveOrganization } from "@/lib/api-auth";
 import { getOrgScopedDb, generateId } from "@/mastra/tools/shared/org-scoped-db";
-import { organization, member, user } from "@/db/schema";
-import { eq, and } from "drizzle-orm";
+import { organization, member } from "@/db/schema";
+import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { NextRequest } from "next/server";
 

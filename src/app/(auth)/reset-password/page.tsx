@@ -9,6 +9,7 @@ import { z } from "zod";
 import { CheckCircle2, AlertTriangle, ArrowLeft, Loader2 } from "lucide-react";
 
 import { authClient } from "@/lib/auth-client";
+import { routes, getRoute } from "@/lib/routes";
 import { AuthCard } from "@/components/auth/auth-card";
 import { AuthInput } from "@/components/auth/auth-input";
 import { PasswordStrength } from "@/components/auth/password-strength";
@@ -91,7 +92,7 @@ function ResetPasswordContent() {
           </div>
           <p className="mb-6 text-sm text-white/70">{tokenError}</p>
           <Link
-            href="/forgot-password"
+            href={getRoute(routes.auth.forgotPassword)}
             className="inline-flex items-center gap-2 text-sm text-white/70 transition-colors hover:text-white"
           >
             <ArrowLeft className="size-4" />
@@ -119,7 +120,7 @@ function ResetPasswordContent() {
             asChild
             className="w-full bg-white text-black hover:bg-white/90"
           >
-            <Link href="/sign-in">Sign in</Link>
+            <Link href={getRoute(routes.auth.signIn)}>Sign in</Link>
           </Button>
         </div>
       </AuthCard>
@@ -173,7 +174,7 @@ function ResetPasswordContent() {
 
       <div className="mt-6 text-center">
         <Link
-          href="/sign-in"
+          href={getRoute(routes.auth.signIn)}
           className="inline-flex items-center gap-2 text-sm text-white/70 transition-colors hover:text-white"
         >
           <ArrowLeft className="size-4" />

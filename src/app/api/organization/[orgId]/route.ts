@@ -1,8 +1,6 @@
 import { authenticateRequest } from "@/lib/api-auth";
 import {
   getOrgScopedDb,
-  requireAdminRole,
-  validateOrgOwnership,
   OrgPermissionError,
 } from "@/mastra/tools/shared/org-scoped-db";
 import { organization, member } from "@/db/schema";

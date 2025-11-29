@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
+import { routes, getRoute } from "@/lib/routes";
 
 function Header() {
   const { data: session, isPending } = authClient.useSession();
@@ -10,7 +11,7 @@ function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-sm border-b border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <Link href="/" className="text-xl font-bold text-white">
+          <Link href={getRoute(routes.home)} className="text-xl font-bold text-white">
             Mastra
           </Link>
 
@@ -19,7 +20,7 @@ function Header() {
               <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             ) : session?.user ? (
               <Link
-                href="/dashboard"
+                href={getRoute(routes.dashboard)}
                 className="px-4 py-2 text-sm font-medium bg-white text-gray-900 hover:bg-white/90 rounded-lg transition-colors"
               >
                 Dashboard
@@ -27,13 +28,13 @@ function Header() {
             ) : (
               <>
                 <Link
-                  href="/signin"
+                  href={getRoute(routes.auth.signIn)}
                   className="px-4 py-2 text-sm font-medium text-white hover:bg-white/10 rounded-lg transition-colors"
                 >
                   Sign In
                 </Link>
                 <Link
-                  href="/signup"
+                  href={getRoute(routes.auth.signUp)}
                   className="px-4 py-2 text-sm font-medium bg-white text-gray-900 hover:bg-white/90 rounded-lg transition-colors"
                 >
                   Get Started
@@ -67,13 +68,13 @@ export default function HomePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/signup"
+                href={getRoute(routes.auth.signUp)}
                 className="px-8 py-4 text-lg font-medium bg-white text-gray-900 hover:bg-white/90 rounded-xl transition-all transform hover:scale-105 shadow-lg"
               >
                 Get Started Free
               </Link>
               <Link
-                href="/signin"
+                href={getRoute(routes.auth.signIn)}
                 className="px-8 py-4 text-lg font-medium bg-white/10 text-white hover:bg-white/20 rounded-xl transition-all backdrop-blur-sm border border-white/20"
               >
                 Sign In
@@ -137,7 +138,7 @@ export default function HomePage() {
               Start creating AI-powered applications today. Sign up to get access to the dashboard and start building with our agents.
             </p>
             <Link
-              href="/signup"
+              href={getRoute(routes.auth.signUp)}
               className="inline-block px-8 py-4 text-lg font-medium bg-white text-gray-900 hover:bg-white/90 rounded-xl transition-all transform hover:scale-105 shadow-lg"
             >
               Create Your Account

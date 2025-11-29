@@ -22,6 +22,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { routes } from "@/lib/routes";
 
 const createOrgSchema = z.object({
   name: z.string().min(1, "Organization name is required"),
@@ -50,7 +51,7 @@ export function CreateOrgModal({ open, onOpenChange }: CreateOrgModalProps) {
     try {
       setIsCreating(true);
 
-      const response = await fetch("/api/organization", {
+      const response = await fetch(routes.api.organization.root, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -67,7 +68,7 @@ export function CreateOrgModal({ open, onOpenChange }: CreateOrgModalProps) {
       const newOrg = (await response.json()) as { id: string };
 
       // Switch to the new organization
-      const switchResponse = await fetch("/api/organization/switch", {
+      const switchResponse = await fetch(routes.api.organization.switch, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ organizationId: newOrg.id }),

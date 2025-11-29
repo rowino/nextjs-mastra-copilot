@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
+import { routes } from "@/lib/routes";
 
 type Organization = {
   id: string;
@@ -15,7 +16,7 @@ type Organization = {
 type AuthContextType = {
   userId: string;
   email: string;
-  orgId: string;
+  orgId: string | null;
   roles: ("admin" | "user")[];
   organizations: Organization[];
   isAdmin: boolean;
@@ -38,8 +39,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       // Fetch organizations and current context in parallel
       const [orgsResponse, currentResponse] = await Promise.all([
-        fetch("/api/organization"),
-        fetch("/api/organization/current"),
+        fetch(routes.api.organization.root),
+        fetch(routes.api.organization.current),
       ]);
 
       if (!orgsResponse.ok || !currentResponse.ok) {
@@ -47,7 +48,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       const orgsData = (await orgsResponse.json()) as { organizations: Organization[] };
-      const currentData = (await currentResponse.json()) as { orgId: string };
+      const currentData = (await currentResponse.json()) as { orgId: string | null };
 
       setOrganizations(orgsData.organizations || []);
       setCurrentOrgId(currentData.orgId || "");

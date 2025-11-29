@@ -1,6 +1,17 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/**
+ * Theme System
+ *
+ * To switch themes, comment/uncomment one of the following imports:
+ * - terminal-theme.css: Dark terminal theme with green accents (default)
+ * - glass-theme.css: Modern glassmorphism with purple/blue accents
+ * - material-theme.css: Clean Material Design light theme
+ */
+@import "./themes/terminal-theme.css";
+/* @import "./themes/glass-theme.css"; */
+/* @import "./themes/material-theme.css"; */
 @custom-variant dark {
   &:is(.dark *) {
     @slot;
@@ -45,6 +56,35 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+/* Theme System Color Utilities */
+  --color-theme-primary: var(--color-primary);
+  --color-theme-primary-muted: var(--color-primary-muted);
+  --color-theme-bg-base: var(--color-bg-base);
+  --color-theme-bg-elevated: var(--color-bg-elevated);
+  --color-theme-bg-card: var(--color-bg-card);
+  --color-theme-bg-hover: var(--color-bg-hover);
+  --color-theme-bg-active: var(--color-bg-active);
+  --color-theme-border-base: var(--color-border-base);
+  --color-theme-border-hover: var(--color-border-hover);
+  --color-theme-border-focus: var(--color-border-focus);
+  --color-theme-foreground: var(--color-text-primary);
+  --color-theme-secondary: var(--color-text-secondary);
+  --color-theme-muted: var(--color-text-muted);
+  --color-theme-inverted: var(--color-text-inverted);
+  --color-theme-success: var(--color-success);
+  --color-theme-success-bg: var(--color-success-bg);
+  --color-theme-warning: var(--color-warning);
+  --color-theme-warning-bg: var(--color-warning-bg);
+  --color-theme-error: var(--color-error);
+  --color-theme-error-bg: var(--color-error-bg);
+  --color-theme-info: var(--color-info);
+  --color-theme-info-bg: var(--color-info-bg);
+  --color-theme-role-admin-bg: var(--color-role-admin-bg);
+  --color-theme-role-admin-border: var(--color-role-admin-border);
+  --color-theme-role-admin-text: var(--color-role-admin-text);
+  --color-theme-role-user-bg: var(--color-role-user-bg);
+  --color-theme-role-user-border: var(--color-role-user-border);
+  --color-theme-role-user-text: var(--color-role-user-text);
 }
 
 body,
@@ -86,16 +126,16 @@ html {
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
-  /* Terminal Color System */
-  --terminal-bg: #0a0a0a;
-  --terminal-surface: #141414;
-  --terminal-border: #2a2a2a;
-  --terminal-border-hover: #3a3a3a;
-  --terminal-text: #e5e5e5;
-  --terminal-text-muted: #888888;
-  --terminal-accent: #00ff88;
-  --terminal-warning: #ffaa00;
-  --terminal-danger: #ff4444;
+  /* Legacy Terminal Color System (deprecated - use theme variables instead) */
+    --terminal-bg: var(--color-bg-base);
+    --terminal-surface: var(--color-bg-elevated);
+    --terminal-border: var(--color-border-base);
+    --terminal-border-hover: var(--color-border-hover);
+    --terminal-text: var(--color-text-primary);
+    --terminal-text-muted: var(--color-text-secondary);
+    --terminal-accent: var(--color-primary);
+    --terminal-warning: var(--color-warning);
+    --terminal-danger: var(--color-error);
 }
 
 .dark {

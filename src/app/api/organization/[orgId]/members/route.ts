@@ -5,10 +5,11 @@ import {
   generateId,
   OrgPermissionError,
 } from "@/mastra/tools/shared/org-scoped-db";
-import { member, user } from "@/db/schema";
+import { member, user, organization, invitation } from "@/db/schema";
 import { eq, and, count } from "drizzle-orm";
 import { z } from "zod";
 import { NextRequest } from "next/server";
+import { sendInvitationEmail } from "@/lib/email";
 
 const inviteMemberSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -18,10 +19,6 @@ const inviteMemberSchema = z.object({
 const updateMemberSchema = z.object({
   memberId: z.string().min(1, "Member ID is required"),
   role: z.enum(["admin", "user"], { required_error: "Role is required" }),
-});
-
-const removeMemberSchema = z.object({
-  memberId: z.string().min(1, "Member ID is required"),
 });
 
 type RouteContext = {
@@ -83,7 +80,7 @@ export async function GET(req: NextRequest, context: RouteContext) {
 export async function POST(req: NextRequest, context: RouteContext) {
   try {
     const authContext = await authenticateRequest();
-    requireAdminRole();
+    requireAdminRole(authContext.roles);
     const { orgId } = await context.params;
     const body = await req.json();
     const { email, role } = inviteMemberSchema.parse(body);
@@ -110,58 +107,102 @@ export async function POST(req: NextRequest, context: RouteContext) {
       );
     }
 
-    // Find user by email
+    // Check for existing user
     const targetUser = await db
       .select()
       .from(user)
       .where(eq(user.email, email))
       .get();
 
-    if (!targetUser) {
-      return Response.json(
-        { error: "User not found with this email address" },
-        { status: 404 }
-      );
-    }
+    const userExists = !!targetUser;
 
     // Check if user is already a member
-    const existingMembership = await db
+    if (targetUser) {
+      const existingMembership = await db
+        .select()
+        .from(member)
+        .where(
+          and(
+            eq(member.organizationId, orgId),
+            eq(member.userId, targetUser.id)
+          )
+        )
+        .get();
+
+      if (existingMembership) {
+        return Response.json(
+          { error: "User is already a member of this organization" },
+          { status: 409 }
+        );
+      }
+    }
+
+    // Check if user already has pending invitation
+    const existingInvite = await db
       .select()
-      .from(member)
+      .from(invitation)
       .where(
         and(
-          eq(member.organizationId, orgId),
-          eq(member.userId, targetUser.id)
+          eq(invitation.organizationId, orgId),
+          eq(invitation.email, email),
+          eq(invitation.status, "pending")
         )
       )
       .get();
 
-    if (existingMembership) {
+    if (existingInvite) {
       return Response.json(
-        { error: "User is already a member of this organization" },
+        { error: "User already has a pending invitation" },
         { status: 409 }
       );
     }
 
-    // Add user as member
-    const memberId = generateId("mem");
-    await db.insert(member).values({
-      id: memberId,
+    // Always create invitation (for both new and existing users)
+    const token = crypto.randomUUID();
+    const expirationDays = parseInt(process.env.INVITE_EXPIRATION_DAYS || "7");
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + expirationDays);
+
+    const invitationId = generateId("inv");
+
+    await db.insert(invitation).values({
+      id: invitationId,
       organizationId: orgId,
-      userId: targetUser.id,
-      role: role,
+      email,
+      role,
+      invitedBy: authContext.userId,
+      token,
+      status: "pending",
+      expiresAt,
       createdAt: new Date(),
+    });
+
+    // Get organization name and inviter name
+    const org = await db
+      .select()
+      .from(organization)
+      .where(eq(organization.id, orgId))
+      .get();
+    const inviter = await db
+      .select()
+      .from(user)
+      .where(eq(user.id, authContext.userId))
+      .get();
+
+    await sendInvitationEmail({
+      to: email,
+      organizationName: org!.name,
+      inviterName: inviter!.name || inviter!.email,
+      role,
+      token,
+      expiresAt,
+      userExists,
     });
 
     return Response.json(
       {
-        id: memberId,
-        userId: targetUser.id,
-        name: targetUser.name,
-        email: targetUser.email,
-        role: role,
-        createdAt: new Date().toISOString(),
-        message: "Member added successfully",
+        message: "Invitation sent successfully",
+        invitationId,
       },
       { status: 201 }
     );
@@ -190,7 +231,7 @@ export async function POST(req: NextRequest, context: RouteContext) {
 export async function PATCH(req: NextRequest, context: RouteContext) {
   try {
     const authContext = await authenticateRequest();
-    requireAdminRole();
+    requireAdminRole(authContext.roles);
     const { orgId } = await context.params;
     const body = await req.json();
     const { memberId, role } = updateMemberSchema.parse(body);
@@ -345,7 +386,7 @@ export async function DELETE(req: NextRequest, context: RouteContext) {
 
     // If not self-removal, require admin role
     if (!isSelf) {
-      requireAdminRole();
+      requireAdminRole(authContext.roles);
 
       // Verify requester is admin
       const requesterMembership = await db

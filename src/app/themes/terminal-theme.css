@@ -1,0 +1,58 @@
+/**
+ * Terminal Theme
+ *
+ * A dark, command-line inspired theme with green accents
+ * reminiscent of classic terminal interfaces.
+ */
+
+:root {
+  /* Primary Colors */
+  --color-primary: #00ff88;
+  --color-primary-muted: rgba(0, 255, 136, 0.9);
+  --color-primary-bg: rgba(0, 255, 136, 0.2);
+  --color-primary-border: #00ff88;
+
+  /* Background Colors */
+  --color-bg-base: #0a0a0a;
+  --color-bg-elevated: #141414;
+  --color-bg-card: #1a1a1a;
+  --color-bg-hover: #2a2a2a;
+  --color-bg-active: #3a3a3a;
+
+  /* Border Colors */
+  --color-border-base: #2a2a2a;
+  --color-border-hover: #3a3a3a;
+  --color-border-focus: #00ff88;
+
+  /* Text Colors */
+  --color-text-primary: #e5e5e5;
+  --color-text-secondary: #888888;
+  --color-text-muted: #666666;
+  --color-text-inverted: #0a0a0a;
+
+  /* Status Colors */
+  --color-success: #00ff88;
+  --color-success-bg: rgba(0, 255, 136, 0.2);
+  --color-success-border: #00ff88;
+
+  --color-warning: #ffaa00;
+  --color-warning-bg: rgba(255, 170, 0, 0.2);
+  --color-warning-border: #ffaa00;
+
+  --color-error: #ff4444;
+  --color-error-bg: rgba(255, 68, 68, 0.1);
+  --color-error-border: #ff4444;
+
+  --color-info: #4488ff;
+  --color-info-bg: rgba(68, 136, 255, 0.2);
+  --color-info-border: #4488ff;
+
+  /* Role Badge Colors */
+  --color-role-admin-bg: rgba(0, 255, 136, 0.2);
+  --color-role-admin-border: #00ff88;
+  --color-role-admin-text: #00ff88;
+
+  --color-role-user-bg: rgba(136, 136, 136, 0.2);
+  --color-role-user-border: #888888;
+  --color-role-user-text: #888888;
+}

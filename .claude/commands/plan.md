@@ -1,43 +1,98 @@
 ---
-description: Execute the implementation planning workflow using the plan template to generate design artifacts.
+description: Plan a new feature before implementing it. Consolidates specification, clarification, task generation, and analysis.
 ---
 
-The user input to you can be provided directly by the agent or as a command argument - you **MUST** consider it before proceeding with the prompt (if not empty).
+Goal: Create a comprehensive plan for a new feature, ensuring clarity, constitutional alignment, and a solid execution strategy.
 
-User input:
+Input: Feature description or existing plan.
 
-$ARGUMENTS
+***USE THE PLAN TOOL!***
 
-Given the implementation details provided as an argument, do this:
+## Step 1: Setup Feature Branch
 
-1. Run `.specify/scripts/bash/setup-plan.sh --json` from the repo root and parse JSON for FEATURE_SPEC, IMPL_PLAN, SPECS_DIR, BRANCH. All future file paths must be absolute.
-   - BEFORE proceeding, inspect FEATURE_SPEC for a `## Clarifications` section with at least one `Session` subheading. If missing or clearly ambiguous areas remain (vague adjectives, unresolved critical choices), PAUSE and instruct the user to run `/clarify` first to reduce rework. Only continue if: (a) Clarifications exist OR (b) an explicit user override is provided (e.g., "proceed without clarification"). Do not attempt to fabricate clarifications yourself.
-2. Read and analyze the feature specification to understand:
-   - The feature requirements and user stories
-   - Functional and non-functional requirements
-   - Success criteria and acceptance criteria
-   - Any technical constraints or dependencies mentioned
+Goal: Ensure work is isolated in a dedicated branch.
 
-3. Read the constitution at `.specify/memory/constitution.md` to understand constitutional requirements.
+Execution steps:
 
-4. Execute the implementation plan template:
-   - Load `.specify/templates/plan-template.md` (already copied to IMPL_PLAN path)
-   - Set Input path to FEATURE_SPEC
-   - Run the Execution Flow (main) function steps 1-9
-   - The template is self-contained and executable
-   - Follow error handling and gate checks as specified
-   - Let the template guide artifact generation in $SPECS_DIR:
-     * Phase 0 generates research.md
-     * Phase 1 generates data-model.md, contracts/, quickstart.md
-     * Phase 2 generates tasks.md
-   - Incorporate user-provided details from arguments into Technical Context: $ARGUMENTS
-   - Update Progress Tracking as you complete each phase
+1.  **Create Branch**:
+    -   Determine a slug for the feature (e.g., `user-auth`).
+    -   Create and switch to a new branch: `git checkout -b feature/{feature-slug}`.
 
-5. Verify execution completed:
-   - Check Progress Tracking shows all phases complete
-   - Ensure all required artifacts were generated
-   - Confirm no ERROR states in execution
+## Step 2: Research
 
-6. Report results with branch name, file paths, and generated artifacts.
+Goal: Gather context on libraries and tools needed for the feature.
 
-Use absolute paths with the repository root for all file operations to avoid path issues.
+Execution steps:
+
+1.  **Identify Dependencies**:
+    -   List libraries or technologies required (e.g., `mastra`, `nextjs`, `better-auth`).
+
+2.  **Check Existing Research**:
+    -   Look for existing research in `.agents/research/{library}/`.
+
+3.  **Conduct Research**:
+    -   If research is missing or outdated, use available tools (search, context7, docs, mcp-tools) to gather info.
+    -   Focus on usage patterns, best practices, and limitations.
+
+4.  **Store Findings**:
+    -   Save the research to `.agents/research/{library}/{topic}.md`.
+
+## Step 3: Specify & Clarify
+
+Goal: Define the feature requirements and resolve ambiguities.
+
+Execution steps:
+
+1.  **Input Handling**:
+    -   If a feature description is provided, use it.
+    -   If not, ask the user for the feature description.
+
+2.  **Constitution Check**:
+    -   Read `.specify/memory/constitution.md`. Ensure the feature aligns with core principles.
+
+3.  **Clarification Loop**:
+    -   Analyze the request for ambiguities (functional, data model, edge cases, etc.).
+    -   Ask up to 5 targeted clarification questions if necessary.
+    -   Update the understanding based on answers.
+
+4.  **Create/Update Spec**:
+    - Create a new folder in `.agents/specs/{feature-slug}/`.
+    - Write requirements to `.agents/specs/{feature-slug}/specs.md`.
+    - Include user stories and acceptance criteria.
+
+## Step 4: Define Tasks & Artifacts
+
+Goal: Break down the feature into actionable tasks and supporting design documents.
+
+Execution steps:
+
+1.  **Generate Tasks**:
+    -   Create `.agents/specs/{feature-slug}/tasks.md`.
+    -   **Phases**: Setup, Tests, Core, Integration, Polish.
+    -   **Dependencies**: Order tasks logically (Setup -> Tests -> Core -> ...).
+    -   **Parallelism**: Mark independent tasks with [P].
+
+## Step 5: Analyze Plan
+
+Goal: Review the generated plan for critical issues.
+
+Execution steps:
+
+1.  **Review**:
+    -   **Completeness**: Are all requirements covered by tasks?
+    -   **Consistency**: Do artifacts align?
+    -   **Risks**: Security, performance, data loss?
+
+2.  **Report**:
+    -   List Critical Issues, Gaps, and Suggestions.
+    -   Verdict: APPROVED or NEEDS REVISION.
+
+## Step 6: Handoff
+
+Goal: Transition to implementation.
+
+Execution steps:
+
+1.  **Instruction**:
+    -   If the plan is APPROVED, instruct the user to run the `/implement` command to start building.
+    -   Example: "Plan approved. Run `/implement` to start execution."

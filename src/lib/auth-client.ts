@@ -1,6 +1,7 @@
 import { createAuthClient } from "better-auth/react";
 import { emailOTPClient, magicLinkClient, twoFactorClient } from "better-auth/client/plugins";
 import { passkeyClient } from "@better-auth/passkey/client";
+import { routes, getRoute } from "@/lib/routes";
 
 const plugins = [];
 
@@ -16,7 +17,7 @@ if (process.env.NEXT_PUBLIC_ENABLE_2FA === "true") {
   plugins.push(
     twoFactorClient({
       onTwoFactorRedirect() {
-        window.location.href = "/signin?2fa=true";
+        window.location.href = getRoute(routes.auth.signIn, { "2fa": "true" });
       },
     })
   );

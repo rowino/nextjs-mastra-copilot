@@ -1,0 +1,64 @@
+/**
+ * Glass Theme
+ *
+ * A modern glassmorphism-inspired theme with frosted glass effects,
+ * subtle gradients, and soft purple/blue accents.
+ */
+
+:root {
+  /* Primary Colors */
+  --color-primary: #8b5cf6;
+  --color-primary-muted: rgba(139, 92, 246, 0.9);
+  --color-primary-bg: rgba(139, 92, 246, 0.15);
+  --color-primary-border: #8b5cf6;
+
+  /* Background Colors */
+  --color-bg-base: #0f0f23;
+  --color-bg-elevated: rgba(30, 30, 60, 0.6);
+  --color-bg-card: rgba(40, 40, 80, 0.4);
+  --color-bg-hover: rgba(60, 60, 120, 0.5);
+  --color-bg-active: rgba(80, 80, 140, 0.6);
+
+  /* Border Colors */
+  --color-border-base: rgba(139, 92, 246, 0.2);
+  --color-border-hover: rgba(139, 92, 246, 0.4);
+  --color-border-focus: #8b5cf6;
+
+  /* Text Colors */
+  --color-text-primary: #f0f0ff;
+  --color-text-secondary: #a0a0c0;
+  --color-text-muted: #707090;
+  --color-text-inverted: #0f0f23;
+
+  /* Status Colors */
+  --color-success: #10b981;
+  --color-success-bg: rgba(16, 185, 129, 0.15);
+  --color-success-border: #10b981;
+
+  --color-warning: #f59e0b;
+  --color-warning-bg: rgba(245, 158, 11, 0.15);
+  --color-warning-border: #f59e0b;
+
+  --color-error: #ef4444;
+  --color-error-bg: rgba(239, 68, 68, 0.15);
+  --color-error-border: #ef4444;
+
+  --color-info: #3b82f6;
+  --color-info-bg: rgba(59, 130, 246, 0.15);
+  --color-info-border: #3b82f6;
+
+  /* Role Badge Colors */
+  --color-role-admin-bg: rgba(139, 92, 246, 0.2);
+  --color-role-admin-border: #8b5cf6;
+  --color-role-admin-text: #a78bfa;
+
+  --color-role-user-bg: rgba(160, 160, 192, 0.2);
+  --color-role-user-border: #a0a0c0;
+  --color-role-user-text: #a0a0c0;
+}
+
+/* Glass effect backdrop blur (apply to cards/modals) */
+.glass-effect {
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+}

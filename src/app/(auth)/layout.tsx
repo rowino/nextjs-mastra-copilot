@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import { routes, getRoute } from "@/lib/routes";
 
 export default function AuthLayout({
   children,
@@ -15,7 +16,7 @@ export default function AuthLayout({
     const checkAuth = async () => {
       const session = await authClient.getSession();
       if (session.data?.user) {
-        router.replace("/dashboard");
+        router.replace(getRoute(routes.dashboard));
       }
     };
     checkAuth();

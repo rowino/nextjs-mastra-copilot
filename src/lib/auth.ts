@@ -4,8 +4,16 @@ import { emailOTP, magicLink, twoFactor, organization } from "better-auth/plugin
 import { passkey } from "@better-auth/passkey";
 import { getDb } from "@/db";
 import type { D1Database } from "@cloudflare/workers-types";
+import {
+  sendEmailOTP,
+  sendMagicLink,
+  sendTwoFactorOTP,
+  sendPasswordReset,
+  sendEmailVerification,
+} from "@/lib/email";
 
 export const getAuth = (d1: D1Database) => {
+
   const db = getDb(d1);
 
   const enableEmailOTP = process.env.NEXT_PUBLIC_ENABLE_EMAIL_OTP === "true";
@@ -19,10 +27,12 @@ export const getAuth = (d1: D1Database) => {
     plugins.push(
       emailOTP({
         async sendVerificationOTP({ email, otp, type }) {
-          // @claude-todo: Implement actual email sending (Resend, SendGrid, etc.)
-          if (process.env.NODE_ENV === "development") {
-            console.log(`[Email OTP] Sending ${type} OTP to ${email}: ${otp}`);
-          }
+          await sendEmailOTP({
+            to: email,
+            otp,
+            type: type === "sign-in" ? "sign-in" : "sign-up",
+            expiresInMinutes: 10,
+          });
         },
       })
     );
@@ -32,10 +42,11 @@ export const getAuth = (d1: D1Database) => {
     plugins.push(
       magicLink({
         async sendMagicLink({ email, url }) {
-          // @claude-todo: Implement actual email sending (Resend, SendGrid, etc.)
-          if (process.env.NODE_ENV === "development") {
-            console.log(`[Magic Link] Sending magic link to ${email}: ${url}`);
-          }
+          await sendMagicLink({
+            to: email,
+            magicLink: url,
+            expiresInMinutes: 10,
+          });
         },
       })
     );
@@ -46,10 +57,12 @@ export const getAuth = (d1: D1Database) => {
       twoFactor({
         otpOptions: {
           async sendOTP({ user, otp }) {
-            // @claude-todo: Implement actual email/SMS sending
-            if (process.env.NODE_ENV === "development") {
-              console.log(`[2FA OTP] Sending OTP to ${user.email}: ${otp}`);
-            }
+            await sendTwoFactorOTP({
+              to: user.email,
+              otp,
+              userName: user.name,
+              expiresInMinutes: 5,
+            });
           },
         },
       })
@@ -92,18 +105,21 @@ export const getAuth = (d1: D1Database) => {
     emailAndPassword: {
       enabled: process.env.NEXT_PUBLIC_ENABLE_EMAIL_PASSWORD === "true",
       async sendResetPassword({ user, url }) {
-        // @claude-todo: Implement actual email sending
-        if (process.env.NODE_ENV === "development") {
-          console.log(`[Password Reset] Sending reset link to ${user.email}: ${url}`);
-        }
+        await sendPasswordReset({
+          to: user.email,
+          resetLink: url,
+          userName: user.name,
+          expiresInMinutes: 30,
+        });
       },
     },
     emailVerification: {
       sendVerificationEmail: async ({ user, url }) => {
-        // @claude-todo: Implement actual email sending
-        if (process.env.NODE_ENV === "development") {
-          console.log(`[Email Verification] Sending verification to ${user.email}: ${url}`);
-        }
+        await sendEmailVerification({
+          to: user.email,
+          verificationLink: url,
+          userName: user.name,
+        });
       },
     },
     socialProviders: {

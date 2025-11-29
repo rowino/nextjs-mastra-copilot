@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useAuthContext } from "@/hooks/use-auth-context";
+import { routes, getRoute } from "@/lib/routes";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,15 +27,15 @@ export function OrgSwitcher() {
 
     try {
       setIsSwitching(true);
-      const response = await fetch("/api/organization/switch", {
+      const response = await fetch(getRoute(routes.api.organization.switch), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ orgId }),
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to switch organization");
+        const errorData = (await response.json()) as { error?: string };
+        throw new Error(errorData.error || "Failed to switch organization");
       }
 
       toast.success("Switched organization");
