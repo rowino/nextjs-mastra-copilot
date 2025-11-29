@@ -2,8 +2,6 @@
   "permissions": {
     "allow": [
       "Bash(xargs:*)",
-      "Bash(/Users/raphael/work/projects/rowino/starters/mastra-worktree/organization-setup/src/app/(protected)/accept-invite/page.tsx)",
-      "Bash(/Users/raphael/work/projects/rowino/starters/mastra-worktree/organization-setup/src/emails/invitation-email.tsx)",
       "Bash(pnpm tsc:*)",
       "Bash(pnpm build:*)",
       "Bash(ls:*)"
