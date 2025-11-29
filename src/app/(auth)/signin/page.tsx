@@ -38,6 +38,7 @@ type SignInFormData = z.infer<typeof signInSchema>;
 function SignInContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const returnUrl = searchParams.get("returnUrl") || getRoute(routes.dashboard);
   const [isLoading, setIsLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const [show2FADialog, setShow2FADialog] = useState(
@@ -83,7 +84,7 @@ function SignInContent() {
               setIsLoading(false);
               return;
             }
-            router.push(getRoute(routes.dashboard));
+            router.push(returnUrl);
           },
           onError: (ctx) => {
             setAuthError(ctx.error.message || "Failed to sign in");
@@ -127,7 +128,7 @@ function SignInContent() {
         return;
       }
 
-      router.push(getRoute(routes.dashboard));
+      router.push(returnUrl);
     } catch {
       setTwoFactorError("Failed to verify code");
     } finally {
@@ -148,7 +149,7 @@ function SignInContent() {
     try {
       const result = await authClient.signIn.magicLink({
         email,
-        callbackURL: getRoute(routes.dashboard),
+        callbackURL: returnUrl,
       });
 
       if (result.error) {
@@ -177,7 +178,7 @@ function SignInContent() {
         return;
       }
 
-      router.push(getRoute(routes.dashboard));
+      router.push(returnUrl);
     } catch {
       setAuthError("Passkey authentication failed");
     } finally {
@@ -194,7 +195,7 @@ function SignInContent() {
           <p className="text-center text-sm text-white/60">
             Don&apos;t have an account?{" "}
             <Link
-              href={getRoute(routes.auth.signUp)}
+              href={searchParams.get("returnUrl") ? `${getRoute(routes.auth.signUp)}?returnUrl=${encodeURIComponent(searchParams.get("returnUrl")!)}` : getRoute(routes.auth.signUp)}
               className="text-white hover:text-white/80 underline underline-offset-4"
             >
               Sign up
@@ -265,7 +266,7 @@ function SignInContent() {
 
         <Divider />
 
-        <SocialButtons callbackURL={getRoute(routes.dashboard)} />
+        <SocialButtons callbackURL={returnUrl} />
 
         {(authConfig.magicLink || authConfig.passkey) && (
           <div className="mt-4 space-y-3">

@@ -10,6 +10,7 @@ const SendInvitationEmailParamsSchema = z.object({
   role: z.string().min(1),
   token: z.string().min(1),
   expiresAt: z.date(),
+  userExists: z.boolean().optional(),
 });
 
 type SendInvitationEmailParams = z.infer<typeof SendInvitationEmailParamsSchema>;
@@ -17,7 +18,9 @@ type SendInvitationEmailParams = z.infer<typeof SendInvitationEmailParamsSchema>
 export async function sendInvitationEmail(params: SendInvitationEmailParams) {
   const validated = SendInvitationEmailParamsSchema.parse(params);
 
-  const inviteLink = getRoute(routes.organization.acceptInvite, { token: validated.token }, true);
+  const inviteLink = validated.userExists
+    ? getRoute(routes.organization.acceptInvite, { token: validated.token }, true)
+    : getRoute(routes.organization.acceptInvite, { token: validated.token, email: validated.to }, true);
 
   await sendEmail({
     to: validated.to,
@@ -28,6 +31,7 @@ export async function sendInvitationEmail(params: SendInvitationEmailParams) {
       role: validated.role,
       inviteLink,
       expiresAt: validated.expiresAt,
+      userExists: validated.userExists,
     }),
   });
 }

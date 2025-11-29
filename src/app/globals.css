@@ -9,9 +9,9 @@
  * - glass-theme.css: Modern glassmorphism with purple/blue accents
  * - material-theme.css: Clean Material Design light theme
  */
-/* @import "./themes/terminal-theme.css"; */
+@import "./themes/terminal-theme.css";
 /* @import "./themes/glass-theme.css"; */
-@import "./themes/material-theme.css";
+/* @import "./themes/material-theme.css"; */
 @custom-variant dark {
   &:is(.dark *) {
     @slot;

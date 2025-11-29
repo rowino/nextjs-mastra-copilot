@@ -18,6 +18,7 @@ interface InvitationEmailProps {
   role: string;
   inviteLink: string;
   expiresAt: Date;
+  userExists?: boolean;
 }
 
 export function InvitationEmail({
@@ -26,8 +27,10 @@ export function InvitationEmail({
   role,
   inviteLink,
   expiresAt,
+  userExists = true,
 }: InvitationEmailProps) {
   const previewText = `You've been invited to join ${organizationName}`;
+  const actionText = userExists ? "Sign in to accept" : "Create account to accept";
 
   return (
     <Html>
@@ -39,6 +42,10 @@ export function InvitationEmail({
           <Text style={text}>
             <strong>{inviterName}</strong> has invited you to join{" "}
             <strong>{organizationName}</strong> as a <strong>{role}</strong>.
+          </Text>
+
+          <Text style={text}>
+            {actionText} your invitation by clicking the button below.
           </Text>
 
           <Section style={buttonContainer}>
@@ -77,22 +84,22 @@ export function InvitationEmail({
 export default InvitationEmail;
 
 const main = {
-  backgroundColor: "var(--color-text-inverted)",
+  backgroundColor: "#ffffff",
   fontFamily:
     '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif',
 };
 
 const container = {
-  backgroundColor: "var(--color-bg-elevated)",
+  backgroundColor: "#f9fafb",
   margin: "0 auto",
   padding: "40px 20px",
   marginBottom: "64px",
   borderRadius: "8px",
-  border: "1px solid var(--color-border-base)",
+  border: "1px solid #e5e7eb",
 };
 
 const h1 = {
-  color: "var(--color-primary)",
+  color: "#10b981",
   fontSize: "24px",
   fontWeight: "600",
   lineHeight: "1.25",
@@ -100,7 +107,7 @@ const h1 = {
 };
 
 const text = {
-  color: "var(--color-text-primary)",
+  color: "#111827",
   fontSize: "16px",
   lineHeight: "1.5",
   margin: "16px 0",
@@ -112,9 +119,9 @@ const buttonContainer = {
 };
 
 const button = {
-  backgroundColor: "var(--color-primary)",
+  backgroundColor: "#10b981",
   borderRadius: "6px",
-  color: "var(--color-text-inverted)",
+  color: "#ffffff",
   fontSize: "16px",
   fontWeight: "600",
   textDecoration: "none",
@@ -124,12 +131,12 @@ const button = {
 };
 
 const hr = {
-  borderColor: "var(--color-border-base)",
+  borderColor: "#e5e7eb",
   margin: "32px 0",
 };
 
 const footer = {
-  color: "var(--color-text-secondary)",
+  color: "#6b7280",
   fontSize: "14px",
   lineHeight: "1.5",
   margin: "12px 0",

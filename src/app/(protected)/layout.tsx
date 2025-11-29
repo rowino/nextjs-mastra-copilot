@@ -9,22 +9,24 @@ import { AuthProvider, useAuthContext } from "@/hooks/use-auth-context";
 import { OrgSwitcher } from "@/components/organization/org-switcher";
 import { routes, getRoute } from "@/lib/routes";
 
+const ALLOWED_PATHS_WITHOUT_ORG = [
+  "/settings",
+  "/dashboard",
+];
+
 function OrgRedirectGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const { orgId, isLoading } = useAuthContext();
 
   useEffect(() => {
-    if (!isLoading && !orgId && pathname !== getRoute(routes.organization.create)) {
-      router.replace(getRoute(routes.organization.create));
+    // Redirect to settings organizations tab if no org and not on allowed path
+    if (!isLoading && !orgId && !ALLOWED_PATHS_WITHOUT_ORG.some(path => pathname.startsWith(path))) {
+      router.replace("/settings?tab=organizations");
     }
   }, [isLoading, orgId, pathname, router]);
 
-  // Don't render children if redirecting
-  if (!isLoading && !orgId && pathname !== getRoute(routes.organization.create)) {
-    return null;
-  }
-
+  // Always render children (dashboard and settings are accessible without org)
   return <>{children}</>;
 }
 
@@ -70,14 +72,11 @@ function LayoutContent({
   children: React.ReactNode;
   session: { user: { id: string; email: string; name?: string | null } };
 }) {
-  const pathname = usePathname();
   const { orgId } = useAuthContext();
-  const showHeader = orgId || pathname === getRoute(routes.organization.create);
 
   return (
     <div className="min-h-screen flex flex-col bg-theme-bg-base font-mono">
-      {showHeader && (
-        <header className="border-b border-theme-border-base">
+      <header className="border-b border-theme-border-base">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center gap-8">
@@ -105,7 +104,6 @@ function LayoutContent({
             </div>
           </div>
         </header>
-      )}
       <main className="flex-1">{children}</main>
     </div>
   );

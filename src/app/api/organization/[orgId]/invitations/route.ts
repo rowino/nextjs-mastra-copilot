@@ -16,7 +16,7 @@ type RouteContext = {
 export async function GET(req: NextRequest, context: RouteContext) {
   try {
     const authContext = await authenticateRequest();
-    requireAdminRole();
+    requireAdminRole(authContext.roles);
     const { orgId } = await context.params;
     const db = getOrgScopedDb();
 
@@ -86,7 +86,7 @@ export async function GET(req: NextRequest, context: RouteContext) {
 export async function DELETE(req: NextRequest, context: RouteContext) {
   try {
     const authContext = await authenticateRequest();
-    requireAdminRole();
+    requireAdminRole(authContext.roles);
     const { orgId } = await context.params;
     const { searchParams } = new URL(req.url);
     const invitationId = searchParams.get("invitationId");

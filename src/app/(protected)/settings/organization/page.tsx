@@ -123,13 +123,6 @@ export default function OrganizationSettingsPage() {
             <Users className="size-4 mr-2" />
             Members
           </TabsTrigger>
-          <TabsTrigger
-            value="invitations"
-            className="bg-transparent data-[state=active]:bg-transparent text-theme-secondary data-[state=active]:text-theme-foreground border-b-2 border-transparent data-[state=active]:border-theme-primary rounded-none px-6 py-3 font-mono uppercase text-xs tracking-wider transition-all duration-150 ease-linear relative -mb-[1px]"
-          >
-            <Mail className="size-4 mr-2" />
-            Invitations
-          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="general" className="space-y-8">
@@ -146,6 +139,17 @@ export default function OrganizationSettingsPage() {
         </TabsContent>
 
         <TabsContent value="members" className="space-y-8">
+          {/* Pending Invitations Section */}
+          <div className="relative">
+            <div className="absolute inset-x-0 top-3 border-t border-theme-border-base" />
+            <h2 className="relative inline-block bg-theme-bg-base pr-4 text-sm font-mono uppercase tracking-wider text-theme-secondary">
+              <Mail className="inline-block size-4 mr-2 mb-1" />
+              Pending Invitations
+            </h2>
+          </div>
+
+          <InvitationList orgId={orgId} />
+
           {/* Team Roster Section */}
           <div className="relative">
             <div className="absolute inset-x-0 top-3 border-t border-theme-border-base" />
@@ -171,19 +175,6 @@ export default function OrganizationSettingsPage() {
           </div>
 
           <InviteMember orgId={orgId} onMemberAdded={fetchMembers} />
-        </TabsContent>
-
-        <TabsContent value="invitations" className="space-y-8">
-          {/* Pending Invitations Section */}
-          <div className="relative">
-            <div className="absolute inset-x-0 top-3 border-t border-theme-border-base" />
-            <h2 className="relative inline-block bg-theme-bg-base pr-4 text-sm font-mono uppercase tracking-wider text-theme-secondary">
-              <Mail className="inline-block size-4 mr-2 mb-1" />
-              Pending Invitations
-            </h2>
-          </div>
-
-          <InvitationList orgId={orgId} />
         </TabsContent>
       </Tabs>
     </div>

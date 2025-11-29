@@ -38,13 +38,16 @@ export function generateId(prefix: string): string {
   return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
 }
 
-export function hasAdminRole(): boolean {
+export function hasAdminRole(roles?: ("admin" | "user")[]): boolean {
+  if (roles !== undefined) {
+    return roles.includes("admin");
+  }
   const context = getAuthContext();
   return context.roles.includes("admin");
 }
 
-export function requireAdminRole(): void {
-  if (!hasAdminRole()) {
+export function requireAdminRole(roles?: ("admin" | "user")[]): void {
+  if (!hasAdminRole(roles)) {
     throw new OrgPermissionError("Admin role required for this operation");
   }
 }

@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -27,8 +27,10 @@ const signUpSchema = z.object({
 
 type SignUpFormData = z.infer<typeof signUpSchema>;
 
-export default function SignUpPage() {
+function SignUpContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnUrl = searchParams.get("returnUrl") || getRoute(routes.dashboard);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -57,7 +59,7 @@ export default function SignUpPage() {
         name: data.name,
         email: data.email,
         password: data.password,
-        callbackURL: getRoute(routes.dashboard),
+        callbackURL: returnUrl,
       });
 
       if (result.error) {
@@ -65,7 +67,7 @@ export default function SignUpPage() {
         return;
       }
 
-      router.push(getRoute(routes.dashboard));
+      router.push(returnUrl);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An unexpected error occurred");
     } finally {
@@ -145,17 +147,31 @@ export default function SignUpPage() {
 
       <Divider />
 
-      <SocialButtons callbackURL={getRoute(routes.dashboard)} />
+      <SocialButtons callbackURL={returnUrl} />
 
       <p className="mt-6 text-center text-sm text-white/70">
         Already have an account?{" "}
         <Link
-          href={getRoute(routes.auth.signIn)}
+          href={searchParams.get("returnUrl") ? `${getRoute(routes.auth.signIn)}?returnUrl=${encodeURIComponent(searchParams.get("returnUrl")!)}` : getRoute(routes.auth.signIn)}
           className="font-medium text-white hover:underline"
         >
           Sign in
         </Link>
       </p>
     </AuthCard>
+  );
+}
+
+export default function SignUpPage() {
+  return (
+    <Suspense fallback={
+      <AuthCard title="Create account" subtitle="Loading...">
+        <div className="flex items-center justify-center py-8">
+          <Loader2 className="size-8 text-white animate-spin" />
+        </div>
+      </AuthCard>
+    }>
+      <SignUpContent />
+    </Suspense>
   );
 }

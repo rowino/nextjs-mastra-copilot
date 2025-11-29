@@ -32,8 +32,11 @@ import {
   Copy,
   Github,
   Mail,
+  Building2,
 } from "lucide-react";
 import { toast } from "sonner";
+import { OrganizationsManager } from "@/components/user/organizations-manager";
+import { useSearchParams } from "next/navigation";
 
 interface Session {
   id: string;
@@ -52,8 +55,14 @@ interface Passkey {
 
 export default function SettingsPage() {
   const { data: session, isPending: sessionLoading } = authClient.useSession();
+  const searchParams = useSearchParams();
 
-  const [activeTab, setActiveTab] = useState("profile");
+  const [activeTab, setActiveTab] = useState(() => {
+    const tabParam = searchParams.get("tab");
+    return tabParam && ["profile", "security", "accounts", "organizations"].includes(tabParam)
+      ? tabParam
+      : "profile";
+  });
   const [isLoading, setIsLoading] = useState(false);
 
   const [name, setName] = useState("");
@@ -449,6 +458,13 @@ export default function SettingsPage() {
           >
             <Link2 className="size-4 mr-2" />
             Accounts
+          </TabsTrigger>
+          <TabsTrigger
+            value="organizations"
+            className="bg-transparent data-[state=active]:bg-transparent text-theme-secondary data-[state=active]:text-theme-foreground border-b-2 border-transparent data-[state=active]:border-theme-primary rounded-none px-6 py-3 font-mono uppercase text-xs tracking-wider transition-all duration-150 ease-linear relative -mb-[1px]"
+          >
+            <Building2 className="size-4 mr-2" />
+            Organizations
           </TabsTrigger>
         </TabsList>
 
@@ -884,6 +900,10 @@ export default function SettingsPage() {
               </div>
             </div>
           </div>
+        </TabsContent>
+
+        <TabsContent value="organizations" className="space-y-8">
+          <OrganizationsManager />
         </TabsContent>
       </Tabs>
 

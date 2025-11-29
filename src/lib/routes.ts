@@ -15,7 +15,6 @@ export const routes = {
   settings: "/settings",
 
   organization: {
-    create: "/create-organization",
     acceptInvite: "/accept-invite",
     settings: "/settings/organization",
   },
@@ -25,12 +24,15 @@ export const routes = {
       root: "/api/organization",
       current: "/api/organization/current",
       switch: "/api/organization/switch",
+      leave: "/api/organization/leave",
       byId: "/api/organization/:orgId",
       members: "/api/organization/:orgId/members",
       invitations: "/api/organization/:orgId/invitations",
     },
     invitations: {
       accept: "/api/invitations/accept",
+      user: "/api/invitations/user",
+      lookup: "/api/invitations/lookup",
     },
     copilotKit: "/api/copilotkit",
   },
